@@ -33,7 +33,8 @@
         bottom: -10px;
     }
     .table-row:hover .data-td {
-        opacity: 0.1;
+        color: black !important;
+        background-color: orange;
     }
     .table-row:hover .action-td {
         display: flex !important;
@@ -110,7 +111,7 @@
                                 </div>
                                 {% if request.user.is_authenticated %}
                                 <div>
-                                    <button data-toggle="modal" data-target="#addSales" type="button" class="btn btn-primary p-0 px-3 py-2 ">
+                                    <button data-toggle="modal" data-target="#addData" type="button" class="btn btn-primary p-0 px-3 py-2 ">
                                         Add
                                     </button>
                                 </div>
@@ -120,35 +121,6 @@
                     </div>
 
                     <div>
-                        <!-- <form action="{% url "create_filter" link %}" method="post"> -->
-                        <!--     {% csrf_token %} -->
-                        <!---->
-                        <!--     <div class="d-flex align-items-center gap-3 mb-3"> -->
-                        <!--         <h3 class="mb-0 mr-3">Filters</h3> -->
-                        <!--         <button id="addButton" type="button" class="btn btn-primary">Add</button> -->
-                        <!--     </div> -->
-                        <!---->
-                        <!--     <div class="mb-3" id="inputContainer"> -->
-                        <!--         {% if filter_instance %} -->
-                        <!--             {% for filter_data in filter_instance %} -->
-                        <!--             <div class="d-flex align-items-center gap-2 mb-3"> -->
-                        <!--                 <div class="d-flex gap-2"> -->
-                        <!--                     <select name="key" id="" class="form-control w-50"> -->
-                        <!---->
-                        <!--                         {% for field in db_field_names %} -->
-                        <!--                             <option {% if filter_data.key == field %}selected{% endif %} value="{{ field }}">{{ field }}</option> -->
-                        <!--                         {% endfor %} -->
-                        <!--                     </select> -->
-                        <!--                     <input type="text" value="{{ filter_data.value }}" placeholder="Enter value" name="value" id="" class="form-control"> -->
-                        <!--                 </div> -->
-                        <!--                 <a href="{% url "delete_filter" link filter_data.id %}" class="remove-button btn btn-danger">X</a> -->
-                        <!--             </div> -->
-                        <!--             {% endfor %} -->
-                        <!--         {% endif %} -->
-                        <!--     </div> -->
-                        <!--     <button id="submitButton" type="submit" {% if not filter_instance %} style="display: none;" {% endif %} class="btn btn-success">Submit</button> -->
-                        <!-- </form> -->
-
                         <div class="card-body">
                             <div class="dt-responsive table-responsive">
                                 <table class="table">
@@ -168,24 +140,20 @@
 
                                             {% if request.user.is_authenticated %}
                                             <td class="d-none action-td" >
-                                                <a data-toggle="modal" data-target="#editSales-{{item.id}}" class="btn btn-primary btn-sm p-0 px-3 pr-4 py-2 " href="#"><i class="tim-icons icon-pencil"></i></a>
-                                                <a data-toggle="modal" data-target="#deleteSales-{{item.id}}" class="btn btn-danger btn-sm p-0 px-3 pr-4 py-2 " href="#"><i class="tim-icons ti icon-trash-simple"></i></a>
-                                            </td>
-                                            {% else %}
-                                            <td class="d-none action-td">
-                                                <a data-toggle="modal" data-target="#viewSales-{{item.id}}" class="btn btn-primary btn-sm p-0 px-3 pr-4 py-2 " href="#"><i class="tim-icons icon-bulb-63"></i></a>
+                                                <a data-toggle="modal" data-target="#editData-{{item.id}}" class="btn btn-primary btn-sm p-0 px-3 pr-4 py-2 " href="#"><i class="tim-icons icon-pencil"></i></a>
+                                                <a data-toggle="modal" data-target="#deleteData-{{item.id}}" class="btn btn-danger btn-sm p-0 px-3 pr-4 py-2 " href="#"><i class="tim-icons ti icon-trash-simple"></i></a>
                                             </td>
                                             {% endif %}
                                         </tr>
 
-                                        <!-- Edit Sales -->
-                                        <div class="modal fade" id="editSales-{{item.id}}" tabindex="-1" aria-labelledby="editSalesLabel" aria-hidden="true">
+                                        <!-- Edit Data -->
+                                        <div class="modal fade" id="editData-{{item.id}}" tabindex="-1" aria-labelledby="editDataLabel" aria-hidden="true">
                                             <div class="modal-dialog modal-xl">
                                                 <div class="modal-content">
                                                     <div class="modal-header">
                                                         <div class="d-flex justify-content-between">
                                                             <div>
-                                                                <h1 class="modal-title fs-5" id="editSalesLabel">Edit {{ link|capfirst }}</h1>
+                                                                <h1 class="modal-title fs-5" id="editDataLabel">Edit {{ link|capfirst }}</h1>
                                                             </div>
                                                             <div>
                                                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -253,14 +221,14 @@
                                             </div>
                                         </div>
 
-                                        <!-- Delete Sales -->
-                                        <div class="modal fade" id="deleteSales-{{item.id}}" tabindex="-1" aria-labelledby="deleteSalesLabel" aria-hidden="true">
+                                        <!-- Delete Data -->
+                                        <div class="modal fade" id="deleteData-{{item.id}}" tabindex="-1" aria-labelledby="deleteDataLabel" aria-hidden="true">
                                             <div class="modal-dialog">
                                             <div class="modal-content">
                                                 <div class="modal-header">
                                                 <div class="d-flex justify-content-between">
                                                     <div>
-                                                        <h1 class="modal-title fs-5" id="deleteSalesLabel">Delete Item</h1>
+                                                        <h1 class="modal-title fs-5" id="deleteDataLabel">Delete Item</h1>
                                                     </div>
                                                     <div>
                                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -279,43 +247,6 @@
                                             </div>
                                             </div>
                                         </div>
-
-                                        <!-- View Sales -->
-                                        <div class="modal fade" id="viewSales-{{item.id}}" tabindex="-1" aria-labelledby="viweSalesLabel" aria-hidden="true">
-                                            <div class="modal-dialog modal-xl">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <div class="d-flex justify-content-between">
-                                                            <div>
-                                                                <h1 class="modal-title fs-5" id="viewSalesLabel">View {{ link|capfirst }}</h1>
-                                                            </div>
-                                                            <div>
-                                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                                    <span aria-hidden="true">&times;</span>
-                                                                </button>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="modal-body">
-                                                        <form action="{% url "update" link item.id %}" method="post">
-                                                            {% csrf_token %}
-
-                                                            <div class="row">
-                                                                {% for field_name in db_field_names %}
-                                                                <div class="col-md-6">
-                                                                    <div class="form-group">
-                                                                        <label for="{{ field_name }}" class="form-label text-black">{{ field_name|title }}</label>
-                                                                        <input readonly type="text" value="{{ item|getattribute:field_name }}" name="{{ field_name }}" id="{{ field_name }}" class="form-control text-black">
-                                                                    </div>
-                                                                </div>
-                                                                {% endfor %}
-                                                            </div>
-                                                        </form>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-
                                         {% endfor %}
                                     </tbody>
                                 </table>
@@ -389,77 +320,7 @@
                     </div>
                 </div>
 
-                <!-- Add Sales -->
-                <div class="modal fade" id="addSales" tabindex="-1" aria-labelledby="addSalesLabel" aria-hidden="true">
-                    <div class="modal-dialog  modal-xl">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <div class="d-flex justify-content-between">
-                                    <div>
-                                        <h1 class="modal-title fs-5" id="addSalesLabel">Add {{ link|capfirst }}</h1>
-                                    </div>
-                                    <div>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="modal-body">
-                                <form method="post" action="{% url "create" link %}" class="row">
-                                    {% csrf_token %}
-
-                                    <!-- FKs -->
-                                    {% for key, values in fk_fields.items %}
-                                    <div class="col-md-6 {% if key == 'created_by' %}d-none{% endif %}">
-                                        <div class="form-group">
-                                            <label for="id_{{ key }}" class="form-label text-black">{{ key|title }}</label>
-                                            <select class="form-control text-black" name="{{ key }}" id="id_{{ key }}">
-                                                {% for i in values %}
-                                                    <option value="{{ i.id }}">{{ i }}</option>
-                                                {% endfor %}
-                                            </select>
-                                        </div>
-                                    </div>
-                                    {% endfor %}
-
-                                    {% for field_name in db_field_names %}
-                                        {% if field_name not in read_only_fields and field_name not in fk_fields_keys %}
-                                        <div class="col-md-6">
-                                            <div class="form-group">
-                                                <label for="id_{{ field_name }}" class="form-label text-black">{{ field_name|title }}</label>
-                                                {% if field_name in choices_dict %}
-                                                <select name="{{ field_name }}" id="id_{{ field_name }}" class="form-control text-black">
-                                                    <option value="">Select {{ field_name }}</option>
-                                                    {% for key, value in choices_dict|get:field_name %}
-                                                        <option value="{{ key }}">{{ value }}</option>
-                                                    {% endfor %}
-                                                </select>
-                                                {% else %}
-                                                    {% if field_name in integer_fields %}
-                                                    <input type="number" name="{{ field_name }}" class="form-control text-black" placeholder="{{ field_name }}" id="id_{{ field_name }}">
-                                                    {% elif field_name in date_time_fields %}
-                                                    <input type="datetime-local" name="{{ field_name }}" class="form-control text-black" placeholder="{{ field_name }}" id="id_{{ field_name }}">
-                                                    {% elif field_name in email_fields %}
-                                                    <input type="email" name="{{ field_name }}" class="form-control text-black" placeholder="{{ field_name }}" id="id_{{ field_name }}">
-                                                    {% else %}
-                                                    <input type="text" name="{{ field_name }}" class="form-control text-black" placeholder="{{ field_name }}" id="id_{{ field_name }}">
-                                                    {% endif %}
-                                                {% endif %}
-                                            </div>
-                                        </div>
-                                        {% endif %}
-                                    {% endfor %}
-
-                                    <div class="col-12">
-                                        <button type="submit" class="btn btn-primary">Add</button>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
+                {% include "dyn_dt/modal_popup.html" %}
             </div>
         </div>
     </div>

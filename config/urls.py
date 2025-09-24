@@ -18,13 +18,23 @@ from django.contrib import admin
 from django.urls import include, path
 from rest_framework.authtoken.views import obtain_auth_token  # <-- NEW
 
+from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
+from django.views.generic import RedirectView
+
 urlpatterns = [
     path("", include("apps.pages.urls")),
     path("", include("apps.dyn_dt.urls")),
-    path("", include("apps.dyn_api.urls")),
     path("charts/", include("apps.charts.urls")),
     path("admin/", admin.site.urls),
     path("", include("admin_black.urls")),
+    # API & its Docs
+    path("api/", include("apps.api.urls")),
+    path("api/schema/", SpectacularAPIView.as_view(), name="schema"),
+    path(
+        "api/docs/",
+        SpectacularSwaggerView.as_view(url_name="schema"),
+        name="swagger-ui",
+    ),
 ]
 
 # Lazy-load on routing is needed

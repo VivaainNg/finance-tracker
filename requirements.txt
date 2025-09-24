@@ -1,7 +1,5 @@
 # Core
 django==4.2.9
-# python-dotenv==1.0.1
-# str2bool==1.1
 
 # UI & Admin UI
 django-jazzmin==3.0.1
@@ -16,9 +14,14 @@ pandas==2.2.3
 graphviz==0.20.3
 astor==0.8.1
 pre_commit==4.2.0
+djangorestframework-camel-case==1.4.2
+django-filter==25.1
+model-bakery==1.20.5
 
-# AI
-anthropic==0.34.2
+# API docs via Swagger/OpenAPI
+drf-spectacular==0.28.0
+drf-spectacular-sidecar==2025.9.1
+drf-yasg==1.21.10
 
 # Deployment
 whitenoise==6.7.0

@@ -25,5 +25,9 @@ urlpatterns = [
     path(
         "export-csv/<str:model_path>/", views.ExportCSVView.as_view(), name="export_csv"
     ),
-    path("dynamic-dt/<str:model_path>/", views.model_dt, name="model_dt"),
+    path(
+        "dynamic-dt/<str:model_path>/",
+        views.display_datatables,
+        name="display-datatables",
+    ),
 ]

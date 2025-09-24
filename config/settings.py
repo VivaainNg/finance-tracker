@@ -60,12 +60,14 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "django_extensions",
+    "django_filters",
+    # OpenAPI schema/docs
+    "drf_spectacular",
+    "drf_spectacular_sidecar",
     # Serve UI pages
     "apps.pages",
     # Dynamic DT
     "apps.dyn_dt",
-    # Dynamic API
-    "apps.dyn_api",
     # Charts
     "apps.charts",
     # Tooling API-GEN
@@ -82,6 +84,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "djangorestframework_camel_case.middleware.CamelCaseMiddleWare",
 ]
 
 ROOT_URLCONF = "config.urls"
@@ -194,18 +197,48 @@ DYNAMIC_DATATB = {
 }
 ########################################
 
-# Syntax: URI -> Import_PATH
-DYNAMIC_API = {
-    # SLUG -> Import_PATH
-    "products": "apps.pages.models.Product",
-    "transactions": "apps.pages.models.Transaction",
-    "categories": "apps.pages.models.Category",
-}
-
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": [
         "rest_framework.authentication.SessionAuthentication",
         "rest_framework.authentication.TokenAuthentication",
     ],
+    "DEFAULT_RENDERER_CLASSES": (
+        "djangorestframework_camel_case.render.CamelCaseJSONRenderer",
+        "djangorestframework_camel_case.render.CamelCaseBrowsableAPIRenderer",
+    ),
+    "DEFAULT_PARSER_CLASSES": (
+        "djangorestframework_camel_case.parser.CamelCaseJSONParser",
+    ),
+    "DEFAULT_FILTER_BACKENDS": [
+        "django_filters.rest_framework.DjangoFilterBackend",
+        "rest_framework.filters.SearchFilter",
+    ],
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
 }
-########################################
+
+###############################################################################
+# OPENAPI SCHEMA / API DOCS
+###############################################################################
+
+# drf-yasg
+# -------------------------------------------------------------------------------
+# https://drf-yasg.readthedocs.io/en/stable/rendering.html
+REDOC_SETTINGS = {"LAZY_RENDERING": False, "REQUIRED_PROPS_FIRST": False}
+
+BASE_REDOC_API_URL = "http://docs"
+
+SWAGGER_SETTINGS = {
+    "DEFAULT_API_URL": f"{BASE_REDOC_API_URL}/",
+    "SECURITY_DEFINITIONS": {
+        "JWT": {"type": "apiKey", "name": "Authorization", "in": "header"}
+    },
+}
+
+# drf-spectacular
+# -------------------------------------------------------------------------------
+# https://drf-spectacular.readthedocs.io/en/latest/settings.html
+SPECTACULAR_SETTINGS = {
+    "TITLE": "API DOCUMENTATION FOR PERSONAL FINANCE TRACKER",
+    "DESCRIPTION": "This is the API documentation for personal finance tracker",
+    "VERSION": "0.0.1",
+}

@@ -91,7 +91,7 @@ def create_filter(request, model_name):
                 parent=model_name, key=key, defaults={"value": value}
             )
 
-        return redirect(reverse("model_dt", args=[model_name]))
+        return redirect(reverse("display-datatables", args=[model_name]))
 
 
 def create_page_items(request, model_name):
@@ -101,7 +101,7 @@ def create_page_items(request, model_name):
         page_items, created = PageItems.objects.update_or_create(
             parent=model_name, defaults={"items_per_page": items}
         )
-        return redirect(reverse("model_dt", args=[model_name]))
+        return redirect(reverse("display-datatables", args=[model_name]))
 
 
 def create_hide_show_filter(request, model_name):
@@ -126,7 +126,7 @@ def delete_filter(request, model_name, id):
     model_name = model_name.lower()
     filter_instance = ModelFilter.objects.get(id=id, parent=model_name)
     filter_instance.delete()
-    return redirect(reverse("model_dt", args=[model_name]))
+    return redirect(reverse("display-datatables", args=[model_name]))
 
 
 def get_model_field_names(model, field_type):
@@ -138,7 +138,11 @@ def get_model_field_names(model, field_type):
     ]
 
 
-def model_dt(request, model_path: str):
+def display_datatables(request, model_path: str):
+    """
+    Function to display datatables on the frontend.
+    """
+
     model_name = None
     model_class = None
     choices_dict = {}
@@ -148,7 +152,7 @@ def model_dt(request, model_path: str):
         model_class = name_to_class(model_name)
 
     if not model_class:
-        return HttpResponse(" > ERR: Getting ModelClass for path: " + model_path)
+        return HttpResponse(f" > ERR: Getting ModelClass for path: {model_path}")
 
     if model_class == Transaction:
         db_fields = [
@@ -164,27 +168,25 @@ def model_dt(request, model_path: str):
         db_fields = [field.name for field in model_class._meta.fields]
 
     fk_fields = get_model_fk_values(model_class)
-    db_filters = []
-    for f in db_fields:
-        if f not in fk_fields.keys():
-            db_filters.append(f)
+    db_filters, field_names = [], []
+    model_series = {}
 
     for field in model_class._meta.fields:
         if field.choices:
             choices_dict[field.name] = field.choices
 
-    field_names = []
     for field_name in db_fields:
-        fields, created = HideShowFilter.objects.get_or_create(
+        if field_name not in fk_fields.keys():
+            db_filters.append(field_name)
+
+        fields, _ = HideShowFilter.objects.get_or_create(
             key=field_name, parent=model_path.lower()
         )
         if fields.key in db_fields:
             field_names.append(fields)
 
-    model_series = {}
-    for f in db_fields:
-        f_values = list(model_class.objects.values_list(f, flat=True))
-        model_series[f] = ", ".join(str(i) for i in f_values)
+        f_values = list(model_class.objects.values_list(field_name, flat=True))
+        model_series[field_name] = ", ".join(str(i) for i in f_values)
 
     # model filter
     filter_string = {}
@@ -218,9 +220,9 @@ def model_dt(request, model_path: str):
     try:
         items = paginator.page(page)
     except PageNotAnInteger:
-        return redirect(reverse("model_dt", args=[model_path]))
+        return redirect(reverse("display-datatables", args=[model_path]))
     except EmptyPage:
-        return redirect(reverse("model_dt", args=[model_path]))
+        return redirect(reverse("display-datatables", args=[model_path]))
 
     read_only_fields = ("id",)
 
@@ -251,7 +253,7 @@ def model_dt(request, model_path: str):
         "segment": "dynamic_dt",
         "user": request.user,
     }
-    return render(request, "dyn_dt/model.html", context)
+    return render(request, "dyn_dt/datatables.html", context)
 
 
 # @login_required(login_url="/accounts/login/")
@@ -286,6 +288,7 @@ def create(request, model_path):
         if not data.get("date_time"):
             data["date_time"] = localtime_now()
 
+        data["created_by"] = request.user
         model_class.objects.create(**data)
 
     return redirect(request.META.get("HTTP_REFERER"))

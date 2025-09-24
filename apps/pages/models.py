@@ -55,7 +55,7 @@ class Transaction(models.Model):
     amount = models.DecimalField(
         verbose_name=_("Amount"),
         max_digits=19,
-        decimal_places=6,
+        decimal_places=2,
         default=Decimal("0.0"),
         blank=True,
     )

@@ -43,7 +43,7 @@ class Migration(migrations.Migration):
                     "amount",
                     models.DecimalField(
                         blank=True,
-                        decimal_places=6,
+                        decimal_places=2,
                         default=Decimal("0.0"),
                         max_digits=19,
                         verbose_name="Amount",

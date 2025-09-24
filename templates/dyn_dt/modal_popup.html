@@ -1,0 +1,72 @@
+{% load get_attribute %}
+
+<!-- Add Data -->
+<div class="modal fade" id="addData" tabindex="-1" aria-labelledby="addDataLabel" aria-hidden="true">
+    <div class="modal-dialog  modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h1 class="modal-title fs-5" id="addDataLabel">Add {{ link|capfirst }}</h1>
+                    </div>
+                    <div>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-body">
+                <form method="post" action="{% url "create" link %}" class="row">
+                    {% csrf_token %}
+
+                    <!-- FKs -->
+                    {% for key, values in fk_fields.items %}
+                    <div class="col-md-6 {% if key == 'created_by' %}d-none{% endif %}">
+                        <div class="form-group">
+                            <label for="id_{{ key }}" class="form-label text-black">{{ key|title }}</label>
+                            <select class="form-control text-black" name="{{ key }}" id="id_{{ key }}">
+                                {% for i in values %}
+                                    <option value="{{ i.id }}">{{ i }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    {% endfor %}
+
+                    {% for field_name in db_field_names %}
+                        {% if field_name not in read_only_fields and field_name not in fk_fields_keys %}
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="id_{{ field_name }}" class="form-label text-black">{{ field_name|title }}</label>
+                                {% if field_name in choices_dict %}
+                                <select name="{{ field_name }}" id="id_{{ field_name }}" class="form-control text-black">
+                                    <option value="">Select {{ field_name }}</option>
+                                    {% for key, value in choices_dict|get:field_name %}
+                                        <option value="{{ key }}">{{ value }}</option>
+                                    {% endfor %}
+                                </select>
+                                {% else %}
+                                    {% if field_name in integer_fields %}
+                                    <input type="number" name="{{ field_name }}" class="form-control text-black" placeholder="{{ field_name }}" id="id_{{ field_name }}">
+                                    {% elif field_name in date_time_fields %}
+                                    <input type="datetime-local" name="{{ field_name }}" class="form-control text-black" placeholder="{{ field_name }}" id="id_{{ field_name }}">
+                                    {% elif field_name in email_fields %}
+                                    <input type="email" name="{{ field_name }}" class="form-control text-black" placeholder="{{ field_name }}" id="id_{{ field_name }}">
+                                    {% else %}
+                                    <input type="text" name="{{ field_name }}" class="form-control text-black" placeholder="{{ field_name }}" id="id_{{ field_name }}">
+                                    {% endif %}
+                                {% endif %}
+                            </div>
+                        </div>
+                        {% endif %}
+                    {% endfor %}
+
+                    <div class="col-12">
+                        <button type="submit" class="btn btn-primary">Add</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

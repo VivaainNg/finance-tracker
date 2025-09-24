@@ -1,8 +1,9 @@
 # Personal Finance Tracker
+[![Django CI](https://github.com/VivaainNg/finance-tracker/actions/workflows/django-ci.yml/badge.svg)](https://github.com/VivaainNg/finance-tracker/actions/workflows/django-ci.yml)
 
 ## Basic Requirements/Pre-requisites
 
-- [Python3](https://www.python.org/downloads/)
+- [Python3](https://www.python.org/downloads/) (Version 3.12+ preferably, in my case I'm specifically using [version 3.12.2](https://www.python.org/downloads/release/python-3122/))
 - [git](https://git-scm.com/downloads)
 
 
@@ -10,19 +11,23 @@
 
 A step by step guide on how to setup your local Python environment for this project.
 
-0: Once you've installed git in your system, clone this repo into your local:
+1. Once you've installed git in your system, clone this repo into your local:
 ```bash
 $ git clone git@github.com:VivaainNg/finance-tracker.git
 ```
 
+<br />
 
-1: Create a local Python venv(virtualenv) based on your environment's name `<envName>`:
+
+2. Create a local Python venv(virtualenv) based on your environment's name `<envName>`:
 
 ```bash
 $ python3 -m venv <envName>
 ```
 
-2: Activate the `<envName>` virtual environment that you've just created from step above:
+<br />
+
+3. Activate the `<envName>` virtual environment that you've just created from step above:
 
 ```
 # On Windows (Command Prompt):
@@ -35,7 +40,9 @@ $ python3 -m venv <envName>
 $ source <envName>/bin/activate
 ```
 
-3: Install all the modules listed within requirements.txt in this repo into your newly-created virtual environment:
+<br />
+
+4. Install all the modules listed within requirements.txt in this repo into your newly-created virtual environment:
 
 ```bash
 # <project_root> refers to the topmost folder right after cloning this repository
@@ -43,23 +50,19 @@ $ cd <project_root>
 $ pip install -r requirements.txt
 ```
 
-## Setup pre-commit
-1: I use pre-commit to normalize the linters, formatters in this repo. Go ahead with:
-```bash
-$ pre-commit install # Only need to run once
-$ pre-commit run --all-files
-```
-
+<br />
 
 ## Running Django web application on your local system:
-1: Sync database based on latest DB's migration files (courtesy of Django's out-of-the-box ORM):
+5. Sync database based on latest DB's migration files (courtesy of Django's out-of-the-box ORM):
 
 ```bash
 $ python manage.py makemigrations
 $ python manage.py migrate
 ```
 
-2: Jumpstart the Django web on your local:
+<br />
+
+6. Jumpstart the Django web on your local:
 ```bash
 $ python manage.py runserver
 ```
@@ -68,6 +71,28 @@ At this point, the app runs at `http://127.0.0.1:8000/`.
 
 > Note: To use the app, please access the registration page and create a new user. After authentication, the app will unlock the private pages.
 
+
+<br />
+
+## Run unit tests over the REST API:
+- To simply run a overall test:
+```bash
+$ python manage.py test apps.api -v 2
+```
+
+<br />
+
+## Continuous Integration (CI)
+- For continuous integration, a [Github Action](https://github.com/features/actions) configuration `.github/workflows/django-ci.yml` is included.
+
+<br />
+
+## Setup pre-commit
+- I use pre-commit to standardize the linters, formatters in this repo. Go ahead with:
+```bash
+$ pre-commit install # Only need to run once
+$ pre-commit run --all-files
+```
 <br />
 
 ## File Structure
@@ -81,10 +106,10 @@ Within the download you'll find the following directories and files:
    |    |-- urls.py                      # Project Routing
    |
    |-- apps/
-   |    |-- charts
-   |    |-- dyn_api                      # APP Routing
-   |    |-- dyn_dt                       # APP Models
-   |    |-- pages                        # Tests
+   |    |-- charts                       # Serve Charts
+   |    |-- apis                         # API endpoints
+   |    |-- dyn_dt                       # APP Models & Datatables
+   |    |-- pages                        # Serve UI pages
    |
    |-- requirements.txt                  # Project Dependencies
    |
@@ -112,11 +137,11 @@ Within the download you'll find the following directories and files:
 
 ## Resources
 
-- **Black Dashboard Django's**
-   - Repository: <https://github.com/creativetimofficial/black-dashboard-django>
-   - Documentation: <https://demos.creative-tim.com/black-dashboard-django/docs/1.0/getting-started/getting-started-django.html>
-- Django: <https://www.djangoproject.com/>
-- DRF (for exposing RESTful API): <https://www.django-rest-framework.org/>
+- [Black Dashboard Django](https://github.com/creativetimofficial/black-dashboard-django): The main inspiration & template themes that I've been using for this project.
+- [Django](https://github.com/django/django): Base framework for the backend of this project.
+- [django-rest-framework](https://github.com/encode/django-rest-framework): For exposing RESTful API on top of Django framework.
+- [drf-spectacular](https://github.com/tfranzel/drf-spectacular): For generating OpenAPI 3 schema on top of DRF.
+- [ruff](https://github.com/astral-sh/ruff) with [pre-commit](https://github.com/pre-commit/pre-commit): To standardize proper linting/formatting code styles.
 
 <br />
 
@@ -128,19 +153,19 @@ Within the download you'll find the following directories and files:
 
 * [X] Create a requirements.txt to list out all the necessary Python modules.
 
-* [ ] Implement unit-testing for views (using [APITestCase](https://www.django-rest-framework.org/api-guide/testing/#api-test-cases) from DRF).
+* [X] Implement unit-testing for views (using [APITestCase](https://www.django-rest-framework.org/api-guide/testing/#api-test-cases) from DRF).
 
-* [ ] Implement documentations/steps on how to utilize the DRF's exposed API (preferably Swagger)
+* [X] Implement documentations/steps on how to utilize the DRF's exposed API (preferably Swagger-like docs).
+
+* [ ] Update to proper graphs/charts in dashboard.
 
 * [ ] Implement HTMX at frontend.
 
-* [ ] Implement [DRF Router](https://www.django-rest-framework.org/api-guide/routers/) for mapping of URL with views.
+* [ ] Implement proper CBV to replace current FBV when rendering dynamic tables.
 
-* [ ] Setup CI/CD to automate workflows via [Github Actions YAML file](.github/workflows/github-actions-ci.yml).
+* [X] Implement [DRF Router](https://www.django-rest-framework.org/api-guide/routers/) for mapping of URL with views.
 
-* [ ] Add codecoverage tools in Github Action's workflow.
-
-* [ ] Implement service layer (Based on Two Scoops of Django).
+* [X] Setup CI to automate workflows via [Github Actions YAML file](.github/workflows/github-actions-ci.yml).
 
 * [ ] Change from pip to [uv](https://astral.sh/blog/uv).
 
