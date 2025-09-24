@@ -11,20 +11,20 @@
       <i class="tim-icons icon-puzzle-10"></i>
       <p>Dynamic Tables</p>
     </a>
-  </li>   
+  </li>
   <li class="{% if 'dynamic_api' in segment %} active {% endif %}">
     <a href="{% url "dynamic_api" %}">
       <i class="tim-icons icon-send"></i>
-      <p>Dynamic API</p>
+      <p>API</p>
     </a>
-  </li>    
+  </li>
   <li class="{% if 'charts' in segment %} active {% endif %}">
     <a href="{% url "charts" %}">
       <i class="tim-icons icon-chart-bar-32"></i>
       <p>Charts</p>
     </a>
-  </li>  
-  
+  </li>
+
   {% if request.user.is_authenticated %}
   <li>
     <a href="{% url 'logout' %}">
@@ -66,12 +66,6 @@
       <p>Icons</p>
     </a>
   </li>
-  <li class="{% if 'map' in segment %} active {% endif %}">
-    <a href="{% url 'map' %}">
-      <i class="tim-icons icon-pin"></i>
-      <p>Maps</p>
-    </a>
-  </li>
   <li class="{% if 'notifications' in segment %} active {% endif %}">
     <a href="{% url 'notifications' %}">
       <i class="tim-icons icon-bell-55"></i>
@@ -94,12 +88,6 @@
     <a href="{% url 'typography' %}">
       <i class="tim-icons icon-align-center"></i>
       <p>Typography</p>
-    </a>
-  </li>
-  <li class="{% if 'rtl' in segment %} active {% endif %}">
-    <a href="{% url 'rtl' %}">
-      <i class="tim-icons icon-world"></i>
-      <p>RTL Support</p>
     </a>
   </li>
 

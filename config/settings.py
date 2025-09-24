@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 
 import os, random, string
 from pathlib import Path
+
 # from dotenv import load_dotenv
 # from str2bool import str2bool
 
@@ -24,29 +25,34 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get('SECRET_KEY')
+SECRET_KEY = os.environ.get("SECRET_KEY")
 if not SECRET_KEY:
-    SECRET_KEY = ''.join(random.choice( string.ascii_lowercase  ) for i in range( 32 ))
+    SECRET_KEY = "".join(random.choice(string.ascii_lowercase) for i in range(32))
 
 # Enable/Disable DEBUG Mode
-DEBUG = os.environ.get('DEBUG', default=True)
-#print(' DEBUG -> ' + str(DEBUG) ) 
+DEBUG = os.environ.get("DEBUG", default=True)
+# print(' DEBUG -> ' + str(DEBUG) )
 
 # Docker HOST
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ["*"]
 
 # Add here your deployment HOSTS
-CSRF_TRUSTED_ORIGINS = ['http://localhost:8000', 'http://localhost:5085', 'http://127.0.0.1:8000', 'http://127.0.0.1:5085']
+CSRF_TRUSTED_ORIGINS = [
+    "http://localhost:8000",
+    "http://localhost:5085",
+    "http://127.0.0.1:8000",
+    "http://127.0.0.1:5085",
+]
 
-RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
-if RENDER_EXTERNAL_HOSTNAME:    
+RENDER_EXTERNAL_HOSTNAME = os.environ.get("RENDER_EXTERNAL_HOSTNAME")
+if RENDER_EXTERNAL_HOSTNAME:
     ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
 
 # Application definition
 
 INSTALLED_APPS = [
-    'jazzmin',
-    'admin_black.apps.AdminBlackConfig',
+    "jazzmin",
+    "admin_black.apps.AdminBlackConfig",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -54,22 +60,17 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "django_extensions",
-
     # Serve UI pages
     "apps.pages",
-
     # Dynamic DT
     "apps.dyn_dt",
-
     # Dynamic API
     "apps.dyn_api",
-
     # Charts
     "apps.charts",
-
     # Tooling API-GEN
-    'rest_framework',            # Include DRF           # <-- NEW 
-    'rest_framework.authtoken',  # Include DRF Auth      # <-- NEW   
+    "rest_framework",  # Include DRF           # <-- NEW
+    "rest_framework.authtoken",  # Include DRF Auth      # <-- NEW
 ]
 
 MIDDLEWARE = [
@@ -85,7 +86,7 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = "config.urls"
 
-HOME_TEMPLATES = os.path.join(BASE_DIR, 'templates')
+HOME_TEMPLATES = os.path.join(BASE_DIR, "templates")
 
 TEMPLATES = [
     {
@@ -109,35 +110,34 @@ WSGI_APPLICATION = "config.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
-DB_ENGINE   = os.getenv('DB_ENGINE'   , None)
-DB_USERNAME = os.getenv('DB_USERNAME' , None)
-DB_PASS     = os.getenv('DB_PASS'     , None)
-DB_HOST     = os.getenv('DB_HOST'     , None)
-DB_PORT     = os.getenv('DB_PORT'     , None)
-DB_NAME     = os.getenv('DB_NAME'     , None)
+DB_ENGINE = os.getenv("DB_ENGINE", None)
+DB_USERNAME = os.getenv("DB_USERNAME", None)
+DB_PASS = os.getenv("DB_PASS", None)
+DB_HOST = os.getenv("DB_HOST", None)
+DB_PORT = os.getenv("DB_PORT", None)
+DB_NAME = os.getenv("DB_NAME", None)
 
 if DB_ENGINE and DB_NAME and DB_USERNAME:
-    DATABASES = { 
-      'default': {
-        'ENGINE'  : 'django.db.backends.' + DB_ENGINE, 
-        'NAME'    : DB_NAME,
-        'USER'    : DB_USERNAME,
-        'PASSWORD': DB_PASS,
-        'HOST'    : DB_HOST,
-        'PORT'    : DB_PORT,
-        }, 
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends." + DB_ENGINE,
+            "NAME": DB_NAME,
+            "USER": DB_USERNAME,
+            "PASSWORD": DB_PASS,
+            "HOST": DB_HOST,
+            "PORT": DB_PORT,
+        },
     }
 else:
     DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': 'db.sqlite3',
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": "db.sqlite3",
         }
     }
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
-
 AUTH_PASSWORD_VALIDATORS = [
     {
         "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
@@ -159,7 +159,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = "en-us"
 
-TIME_ZONE = "UTC"
+TIME_ZONE = "Asia/Kuala_Lumpur"
 
 USE_I18N = True
 
@@ -169,14 +169,12 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
-STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATIC_URL = "/static/"
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 
-STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, 'static'),
-)
+STATICFILES_DIRS = (os.path.join(BASE_DIR, "static"),)
 
-#if not DEBUG:
+# if not DEBUG:
 #    STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # Default primary key field type
@@ -184,26 +182,30 @@ STATICFILES_DIRS = (
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-LOGIN_REDIRECT_URL = '/'
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+LOGIN_REDIRECT_URL = "/"
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
 # ### DYNAMIC_DATATB Settings ###
 DYNAMIC_DATATB = {
-    # SLUG -> Import_PATH 
-    'product'  : "apps.pages.models.Product",
+    # SLUG -> Import_PATH
+    "product": "apps.pages.models.Product",
+    "transaction": "apps.pages.models.Transaction",
+    "category": "apps.pages.models.Category",
 }
 ########################################
 
 # Syntax: URI -> Import_PATH
 DYNAMIC_API = {
-    # SLUG -> Import_PATH 
-    'product'  : "apps.pages.models.Product",
+    # SLUG -> Import_PATH
+    "products": "apps.pages.models.Product",
+    "transactions": "apps.pages.models.Transaction",
+    "categories": "apps.pages.models.Category",
 }
 
 REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework.authentication.SessionAuthentication',
-        'rest_framework.authentication.TokenAuthentication',
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        "rest_framework.authentication.SessionAuthentication",
+        "rest_framework.authentication.TokenAuthentication",
     ],
 }
 ########################################

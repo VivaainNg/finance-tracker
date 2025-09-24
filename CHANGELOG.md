@@ -18,13 +18,13 @@
   - Session-based Authentication, Password recovery
   - DB Persistence: SQLite (default), can be used with MySql, PgSql
   - Docker, CI/CD for Render
-  - Vite for assets management 
+  - Vite for assets management
 
 ## [1.0.25] 2025-04-16
 ### Changes
 
 - Update RM Links
-  - [Black Dashboard](https://app-generator.dev/product/black-dashboard/) Design 
+  - [Black Dashboard](https://app-generator.dev/product/black-dashboard/) Design
   - [Creative-Tim](https://app-generator.dev/agency/creative-tim/) Agency
 - Update Sidebar
 
@@ -73,7 +73,7 @@
 - 👉 [Django Black Dashboard](https://app-generator.dev/product/black-dashboard/django/) - `Product Page`
 - 👉 [Django Black Dashboard](https://app-generator.dev/docs/products/django/black-dashboard/index.html) - `Complete Information` and Support Links
   - [Getting Started with Django](https://app-generator.dev/docs/technologies/django/index.html) - a `comprehensive tutorial`
-  - `Configuration`: Install Tailwind/Flowbite, Prepare Environment, Setting up the Database 
+  - `Configuration`: Install Tailwind/Flowbite, Prepare Environment, Setting up the Database
   - `Start with Docker`
   - `Manual Build`
   - `Start the project`
@@ -112,10 +112,10 @@
 
 - Deprecate `distutils`
   - use `str2bool`
-- Update Deps 
-  - `requirements.txt`  
+- Update Deps
+  - `requirements.txt`
 - Update README: [PRO Version](https://app-generator.dev/product/black-dashboard-pro/django/), List features
-  - `API`, **Charts** 
+  - `API`, **Charts**
   - **DataTables** (Filters, Export)
   - **Celery**
   - **Media Files Manager**
@@ -130,8 +130,8 @@
 ## [1.0.13] 2023-10-24
 ### Changes
 
-- Update Dependencies 
-- Update README 
+- Update Dependencies
+- Update README
 
 ## [1.0.12] 2023-02-27
 ### Changes
@@ -145,7 +145,7 @@
 - Bump UI Version
 - Added Local Templates and STATICs
 - Added Gulp Tooling for SCSS Compilation
-- Update DOCS (readme) 
+- Update DOCS (readme)
 
 ## [1.0.10] 2023-02-27
 ### Changes
@@ -163,8 +163,8 @@
 ### Changes
 
 - Move to theme-based pattern
-  - [Django Black Admin](https://github.com/app-generator/django-admin-black) 
-- 🚀 `Deployment` 
+  - [Django Black Admin](https://github.com/app-generator/django-admin-black)
+- 🚀 `Deployment`
   - `CI/CD` flow via `Render`
 
 ## [1.0.7] 2022-09-09
@@ -180,7 +180,7 @@
   - Timestamp: `2022-05-25 10:28`
 - Added CDN/Static Server management
   - `ASSETS_ROOT` env variable
-  
+
 ## [1.0.5] 2022-05-20
 ### Improvements
 
@@ -191,11 +191,11 @@
 ### Improvements
 
 - Bump Django Codebase to [v2stable.0.1](https://github.com/app-generator/boilerplate-code-django-dashboard/releases)
-- Dependencies update (all packages) 
+- Dependencies update (all packages)
   - Django==4.0.1
 - Settings update for Django 4.x
   - `New Parameter`: CSRF_TRUSTED_ORIGINS
-    - [Origin header checking isn`t performed in older versions](https://docs.djangoproject.com/en/4.0/ref/settings/#csrf-trusted-origins)  
+    - [Origin header checking isn`t performed in older versions](https://docs.djangoproject.com/en/4.0/ref/settings/#csrf-trusted-origins)
 
 ## [1.0.3] 2021-09-17
 ### Improvements
@@ -214,16 +214,16 @@
   - Better Code formatting
   - Improved Files organization
   - Optimize imports
-  - Docker Scripts Update 
+  - Docker Scripts Update
 - Tooling:
-  - Gulp SASS compilation script   
+  - Gulp SASS compilation script
   - `Update README` - Recompile SCSS (new section)
-- Fixes: 
+- Fixes:
   - Patch 500 Error when authenticated users access `admin` path (no slash at the end)
-  - Patch [#16](https://github.com/app-generator/boilerplate-code-django-dashboard/issues/16): Minor issue in Docker 
+  - Patch [#16](https://github.com/app-generator/boilerplate-code-django-dashboard/issues/16): Minor issue in Docker
 
 ## [1.0.1] 2021-01-13
-### Improvements 
+### Improvements
 
 - Bump UI: [Jinja Template Black](https://github.com/app-generator/jinja-black-dashboard) v1.0.1
 - Bump Codebase: [Django Dashboard](https://github.com/app-generator/boilerplate-code-django-dashboard) v1.0.4

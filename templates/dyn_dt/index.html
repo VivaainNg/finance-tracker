@@ -1,7 +1,7 @@
 {% extends "layouts/base.html" %}
 {% load static %}
 
-{% block title %} {% if page_title %} page_title {% else %} Dynamic DataTables {% endif %} {% endblock title %} 
+{% block title %} {% if page_title %} page_title {% else %} Dynamic DataTables {% endif %} {% endblock title %}
 
 {% block content %}
 <!-- [ Main Content ] start -->
@@ -21,14 +21,14 @@
                         {% for link in routes %}
                             <li>
                                 <a href="{% url "model_dt" link %}">{{ link }}</a>
-                            </li>    
+                            </li>
                         {% endfor %}
                     </ul>
                 </div>
             </div>
         </div>
     </div>
-</div> 
+</div>
 
 {% endblock content %}
 

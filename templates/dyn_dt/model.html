@@ -1,7 +1,7 @@
 {% extends "layouts/base.html" %}
 {% load static get_attribute %}
 
-{% block title %} {% if page_title %} {{page_title}} {% else %} Dynamic DataTables {% endif %} {% endblock title %} 
+{% block title %} {% if page_title %} {{page_title}} {% else %} Dynamic DataTables {% endif %} {% endblock title %}
 
 {% block extrastyle %}
 
@@ -120,44 +120,44 @@
                     </div>
 
                     <div>
-                        <form action="{% url "create_filter" link %}" method="post">
-                            {% csrf_token %}
-                
-                            <div class="d-flex align-items-center gap-3 mb-3">
-                                <h3 class="mb-0 mr-3">Filters</h3>
-                                <button id="addButton" type="button" class="btn btn-primary">Add</button>
-                            </div>
-
-                            <div class="mb-3" id="inputContainer">
-                                {% if filter_instance %}
-                                    {% for filter_data in filter_instance %}
-                                    <div class="d-flex align-items-center gap-2 mb-3">
-                                        <div class="d-flex gap-2">
-                                            <select name="key" id="" class="form-control w-50">
-
-                                                {% for field in db_field_names %}
-                                                    <option {% if filter_data.key == field %}selected{% endif %} value="{{ field }}">{{ field }}</option>
-                                                {% endfor %}
-                                            </select>
-                                            <input type="text" value="{{ filter_data.value }}" placeholder="Enter value" name="value" id="" class="form-control">
-                                        </div>
-                                        <a href="{% url "delete_filter" link filter_data.id %}" class="remove-button btn btn-danger">X</a>
-                                    </div>
-                                    {% endfor %}
-                                {% endif %}
-                            </div>
-                            <button id="submitButton" type="submit" {% if not filter_instance %} style="display: none;" {% endif %} class="btn btn-success">Submit</button>
-                        </form>
+                        <!-- <form action="{% url "create_filter" link %}" method="post"> -->
+                        <!--     {% csrf_token %} -->
+                        <!---->
+                        <!--     <div class="d-flex align-items-center gap-3 mb-3"> -->
+                        <!--         <h3 class="mb-0 mr-3">Filters</h3> -->
+                        <!--         <button id="addButton" type="button" class="btn btn-primary">Add</button> -->
+                        <!--     </div> -->
+                        <!---->
+                        <!--     <div class="mb-3" id="inputContainer"> -->
+                        <!--         {% if filter_instance %} -->
+                        <!--             {% for filter_data in filter_instance %} -->
+                        <!--             <div class="d-flex align-items-center gap-2 mb-3"> -->
+                        <!--                 <div class="d-flex gap-2"> -->
+                        <!--                     <select name="key" id="" class="form-control w-50"> -->
+                        <!---->
+                        <!--                         {% for field in db_field_names %} -->
+                        <!--                             <option {% if filter_data.key == field %}selected{% endif %} value="{{ field }}">{{ field }}</option> -->
+                        <!--                         {% endfor %} -->
+                        <!--                     </select> -->
+                        <!--                     <input type="text" value="{{ filter_data.value }}" placeholder="Enter value" name="value" id="" class="form-control"> -->
+                        <!--                 </div> -->
+                        <!--                 <a href="{% url "delete_filter" link filter_data.id %}" class="remove-button btn btn-danger">X</a> -->
+                        <!--             </div> -->
+                        <!--             {% endfor %} -->
+                        <!--         {% endif %} -->
+                        <!--     </div> -->
+                        <!--     <button id="submitButton" type="submit" {% if not filter_instance %} style="display: none;" {% endif %} class="btn btn-success">Submit</button> -->
+                        <!-- </form> -->
 
                         <div class="card-body">
                             <div class="dt-responsive table-responsive">
                                 <table class="table">
                                     <thead>
-                                    <tr>
-                                        {% for field in db_field_names %}
-                                            <th id="th_{{ field }}" scope="col">{{ field }}</th>
-                                        {% endfor %}
-                                    </tr>
+                                        <tr>
+                                            {% for field in db_field_names %}
+                                                <th id="th_{{ field }}" scope="col">{{ field }}</th>
+                                            {% endfor %}
+                                        </tr>
                                     </thead>
                                     <tbody>
                                         {% for item in items %}
@@ -165,7 +165,7 @@
                                             {% for field_name in db_field_names %}
                                             <td class="td_{{ field_name }} data-td">{{ item|getattribute:field_name }}</td>
                                             {% endfor %}
-                
+
                                             {% if request.user.is_authenticated %}
                                             <td class="d-none action-td" >
                                                 <a data-toggle="modal" data-target="#editSales-{{item.id}}" class="btn btn-primary btn-sm p-0 px-3 pr-4 py-2 " href="#"><i class="tim-icons icon-pencil"></i></a>
@@ -177,7 +177,7 @@
                                             </td>
                                             {% endif %}
                                         </tr>
-                
+
                                         <!-- Edit Sales -->
                                         <div class="modal fade" id="editSales-{{item.id}}" tabindex="-1" aria-labelledby="editSalesLabel" aria-hidden="true">
                                             <div class="modal-dialog modal-xl">
@@ -208,7 +208,7 @@
                                                                             {% for i in values %}
                                                                                 <option value="{{ i.id }}">{{ i }}</option>
                                                                             {% endfor %}
-                                                                        </select>                                                    
+                                                                        </select>
                                                                     </div>
                                                                 </div>
                                                                 {% endfor %}
@@ -216,7 +216,7 @@
                                                                 {% for field_name in db_field_names %}
                                                                     {% if field_name not in read_only_fields and field_name not in fk_fields_keys %}
                                                                         <div class="col-md-6">
-                                                                            <div class="form-group">                                                                    
+                                                                            <div class="form-group">
                                                                                 <label for="id_{{ field_name }}" class="form-label text-black">{{ field_name|title }}</label>
                                                                                 {% if field_name in choices_dict %}
                                                                                     <select name="{{ field_name }}" id="id_{{ field_name }}" class="form-control text-black">
@@ -252,7 +252,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                
+
                                         <!-- Delete Sales -->
                                         <div class="modal fade" id="deleteSales-{{item.id}}" tabindex="-1" aria-labelledby="deleteSalesLabel" aria-hidden="true">
                                             <div class="modal-dialog">
@@ -299,7 +299,7 @@
                                                     <div class="modal-body">
                                                         <form action="{% url "update" link item.id %}" method="post">
                                                             {% csrf_token %}
-                                                            
+
                                                             <div class="row">
                                                                 {% for field_name in db_field_names %}
                                                                 <div class="col-md-6">
@@ -315,7 +315,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                
+
                                         {% endfor %}
                                     </tbody>
                                 </table>
@@ -408,17 +408,17 @@
                             <div class="modal-body">
                                 <form method="post" action="{% url "create" link %}" class="row">
                                     {% csrf_token %}
-                                    
+
                                     <!-- FKs -->
                                     {% for key, values in fk_fields.items %}
-                                    <div class="col-md-6">
+                                    <div class="col-md-6 {% if key == 'created_by' %}d-none{% endif %}">
                                         <div class="form-group">
-                                            <label for="id_{{ key }}" class="form-label">{{ key|title }}</label>
+                                            <label for="id_{{ key }}" class="form-label text-black">{{ key|title }}</label>
                                             <select class="form-control text-black" name="{{ key }}" id="id_{{ key }}">
                                                 {% for i in values %}
                                                     <option value="{{ i.id }}">{{ i }}</option>
                                                 {% endfor %}
-                                            </select>                                                    
+                                            </select>
                                         </div>
                                     </div>
                                     {% endfor %}
@@ -450,7 +450,7 @@
                                         </div>
                                         {% endif %}
                                     {% endfor %}
-                                    
+
                                     <div class="col-12">
                                         <button type="submit" class="btn btn-primary">Add</button>
                                     </div>
@@ -459,7 +459,7 @@
                         </div>
                     </div>
                 </div>
-                
+
             </div>
         </div>
     </div>
@@ -474,14 +474,14 @@
     const link = '{{ link }}';
     document.addEventListener('DOMContentLoaded', function () {
       var checkboxes = document.querySelectorAll('#dropdownDefaultCheckbox input[type="checkbox"]');
-      
+
       checkboxes.forEach(function (checkbox) {
-  
+
         var targetColumnId = checkbox.getAttribute('data-target');
         var targetColumn = document.getElementById('th_' + targetColumnId);
         var exportTargetColumn = document.getElementById('th_' + targetColumnId + '_export');
         var targetDataCells = document.querySelectorAll('.td_' + targetColumnId);
-  
+
         if (checkbox.checked) {
           targetColumn.style.display = 'none';
           exportTargetColumn.style.display = 'none';
@@ -489,13 +489,13 @@
             dataCell.style.display = 'none';
           });
         }
-  
+
         checkbox.addEventListener('change', function () {
           var targetColumnId = this.getAttribute('data-target');
           var targetColumn = document.getElementById('th_' + targetColumnId);
           var exportTargetColumn = document.getElementById('th_' + targetColumnId + '_export');
           var targetDataCells = document.querySelectorAll('.td_' + targetColumnId);
-          
+
           if (this.checked) {
             targetColumn.style.display = 'none';
             exportTargetColumn.style.display = 'none';
@@ -509,7 +509,7 @@
               dataCell.style.display = '';
             });
           }
-  
+
           fetch(`/create-hide-show-items/${link}/`, {
             method: 'POST',
             headers: {
@@ -521,17 +521,17 @@
               value: this.checked
             })
           })
-  
+
         });
       });
     });
 </script>
 
 <script>
-   
+
     function getPageItems(selectObject) {
       var value = selectObject.value;
-    
+
       fetch(`/create-page-items/${link}/`, {
         method: 'POST',
         headers: {
@@ -549,7 +549,7 @@
 <script>
     document.getElementById('addButton').addEventListener('click', function() {
       var fieldNames = {{ db_filters|safe }};
-  
+
       var template = `
         <div class="input-container d-flex align-items-center gap-2 mb-3">
           <div class="d-flex gap-2">
@@ -561,26 +561,26 @@
           <button class="remove-button btn btn-danger" onclick="removeInputContainer(this)">X</button>
         </div>
       `;
-  
+
       var tempDiv = document.createElement('div');
       tempDiv.innerHTML = template;
-  
+
       document.getElementById('inputContainer').appendChild(tempDiv);
-  
+
       document.getElementById('submitButton').style.display = 'inline-block';
     });
-  
+
     function removeInputContainer(element) {
       var inputContainer = element.closest('.input-container');
-  
+
       inputContainer.remove();
-      
+
       var inputContainers = document.getElementsByClassName('input-container');
       if (inputContainers.length === 0) {
         document.getElementById('submitButton').style.display = 'none';
       }
     }
-  
+
   </script>
 
 {% endblock extrajs %}
