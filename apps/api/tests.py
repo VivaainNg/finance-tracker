@@ -6,6 +6,7 @@ from apps.pages.models import Transaction, Category
 from model_bakery import baker
 
 from django.contrib.auth import get_user_model
+User = get_user_model()
 
 
 class TransactionViewSetTestCase(APITestCase):
@@ -15,7 +16,7 @@ class TransactionViewSetTestCase(APITestCase):
 
     @classmethod
     def setUpTestData(cls):
-        cls.user = get_user_model().objects.create_user(
+        cls.user = User.objects.create_user(
             username="tester", password="password123"
         )
         cls.category = baker.make(Category, name="Food")

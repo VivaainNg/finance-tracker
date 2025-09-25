@@ -169,7 +169,7 @@
                                                             <div class="row">
                                                                 <!-- FKs -->
                                                                 {% for key, values in fk_fields.items %}
-                                                                <div class="col-md-6">
+                                                                <div class="col-md-6 {% if key == 'created_by' %}d-none{% endif %}">
                                                                     <div class="form-group">
                                                                         <label for="id_{{ key }}" class="form-label text-black">{{ key|title }}</label>
                                                                         <select class="form-control text-black" name="{{ key }}" id="id_{{ key }}">

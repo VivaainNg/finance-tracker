@@ -1,11 +1,9 @@
 from django.db import models
 from decimal import Decimal
-from django.conf import settings
 from django.utils.translation import gettext_lazy as _
 from .utils import localtime_now
-
-# Create your models here.
-
+from django.conf import settings
+from django.contrib.auth.models import AbstractUser
 
 class Product(models.Model):
     id = models.AutoField(primary_key=True)
@@ -17,6 +15,15 @@ class Product(models.Model):
         return self.name
 
 
+class User(AbstractUser):
+    """
+    Model for User class, inheriting from AbstractUser which
+    serves as a blueprint for User model.
+    """
+
+    pass
+
+
 class Category(models.Model):
     """Model for storing Category information."""
 
@@ -26,6 +33,9 @@ class Category(models.Model):
         max_length=128,
         unique=True,
     )
+
+    class Meta:
+        verbose_name_plural = _("Categories")
 
     def __str__(self) -> str:
         return self.name
@@ -77,9 +87,7 @@ class Transaction(models.Model):
         settings.AUTH_USER_MODEL,
         verbose_name=_("Created by"),
         related_name="+",
-        on_delete=models.SET_NULL,
-        blank=True,
-        null=True,
+        on_delete=models.CASCADE,
     )
 
     def __str__(self) -> str:

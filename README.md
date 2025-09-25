@@ -60,6 +60,12 @@ $ python manage.py makemigrations
 $ python manage.py migrate
 ```
 
+> OPTIONAL: You can also run the following script to populate DB with ready-made Categories.
+
+```bash
+$ python manage.py initialize_category -c
+```
+
 <br />
 
 6. Jumpstart the Django web on your local:

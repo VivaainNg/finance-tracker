@@ -312,6 +312,9 @@ def delete(request, model_path, id):
 
 @login_required(login_url="/accounts/login/")
 def update(request, model_path, id):
+    """
+    Function to allow users to Edit Dynamic tables.
+    """
     model_class = None
 
     if model_path in settings.DYNAMIC_DATATB.keys():
@@ -334,11 +337,14 @@ def update(request, model_path, id):
 
                 # Process FKs
                 if attribute in fk_fields.keys():
-                    value = (
-                        name_to_class(fk_fields[attribute])
-                        .objects.filter(id=value)
-                        .first()
-                    )
+                    if attribute == "created_by":
+                        value = request.user
+                    else:
+                        value = (
+                            name_to_class(fk_fields[attribute])
+                            .objects.filter(id=value)
+                            .first()
+                        )
 
                 setattr(item, attribute, value)
 
