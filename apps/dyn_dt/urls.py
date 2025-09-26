@@ -22,6 +22,21 @@ urlpatterns = [
     path("create/<str:model_path>/", views.create, name="create"),
     path("delete/<str:model_path>/<int:id>/", views.delete, name="delete"),
     path("update/<str:model_path>/<int:id>/", views.update, name="update"),
+    # path("test-transaction/", views.TransactionListView.as_view(), name="test-transaction"),
+    path("transactions/create/", views.transaction_modal, name="transactions-create"),
+    path(
+        "transactions/<int:pk>/edit/", views.transaction_modal, name="transactions-edit"
+    ),
+    path(
+        "transactions/<int:pk>/confirm-delete/",
+        views.transaction_confirm_delete,
+        name="transactions-confirm-delete",
+    ),
+    path(
+        "transactions/<int:pk>/delete/",
+        views.transaction_delete,
+        name="transactions-delete",
+    ),
     path(
         "export-csv/<str:model_path>/", views.ExportCSVView.as_view(), name="export_csv"
     ),

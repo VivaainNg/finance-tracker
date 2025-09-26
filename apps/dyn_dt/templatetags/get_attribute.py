@@ -13,7 +13,7 @@ def getattribute(value, arg):
             return attr_value.strftime("%Y-%m-%d %H:%M:%S")
 
         return attr_value
-    except:
+    except Exception:
         return ""
 
 

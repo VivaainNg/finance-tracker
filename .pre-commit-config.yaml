@@ -15,15 +15,19 @@ repos:
       - id: black
         language_version: python3.12
 
-  - repo: https://github.com/pycqa/flake8
-    rev: 7.0.0
-    hooks:
-      - id: flake8
-        language_version: python3.12
-
   - repo: https://github.com/asottile/pyupgrade
     rev: v3.15.0
     hooks:
       - id: pyupgrade
         args: ["--py312-plus"]
         language_version: python3.12
+
+  # Runs the Ruff linter.
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.13.2
+    hooks:
+      # Linter
+      - id: ruff
+        args: [--fix, --exit-non-zero-on-fix, --config=pyproject.toml]
+      # Formatter
+      - id: ruff-format

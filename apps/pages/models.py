@@ -5,6 +5,7 @@ from .utils import localtime_now
 from django.conf import settings
 from django.contrib.auth.models import AbstractUser
 
+
 class Product(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=100)

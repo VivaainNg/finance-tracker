@@ -95,3 +95,5 @@ ENV/
 public/staticfiles/
 
 db.sqlite3
+
+requirements_local.txt

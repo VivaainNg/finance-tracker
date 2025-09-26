@@ -1,28 +1,107 @@
 from decimal import Decimal
-from typing import Union
+from django.views.decorators.http import require_http_methods
+from .forms import TransactionForm
+from apps.dyn_dt.filters import TransactionDataTablesFilter
+from apps.dyn_dt.tables import TransactionDataTables
+from django_tables2 import RequestConfig
 import django
 from django.db.models.base import ModelBase
-import requests, base64, json, csv
+import json
+import csv
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
-from django.utils import timezone
 from django.http import HttpResponse, JsonResponse
-from django.utils.safestring import mark_safe
 from django.conf import settings
 from django.urls import reverse
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
-from django.urls import reverse
 from django.views import View
 from django.db import models
-from pprint import pp
 import importlib
 
 from apps.dyn_dt.models import ModelFilter, PageItems, HideShowFilter
 from apps.dyn_dt.utils import user_filter
-from apps.pages.models import Category, Transaction
+from apps.pages.models import Transaction
 from apps.pages.utils import localtime_now
 
-# from cli import *
+from django_filters.views import FilterView
+from django_tables2.views import SingleTableMixin
+
+
+class TransactionListView(SingleTableMixin, FilterView):
+    """
+    Views to display Transaction's datatables.
+    """
+
+    table_class = TransactionDataTables
+    model = Transaction
+    filterset_class = TransactionDataTablesFilter
+    template_name = "dyn_dt/index.html"
+
+
+# @login_required
+@require_http_methods(["GET", "POST"])
+def transaction_modal(request, pk=None):
+    """
+    Function to create an new Transaction model,
+    or updates an existing ones.
+    """
+
+    if pk:
+        transaction = get_object_or_404(Transaction, pk=pk)
+    else:
+        transaction = Transaction(created_by=request.user)
+
+    if request.method == "POST":
+        form = TransactionForm(request.POST, instance=transaction)
+        if form.is_valid():
+            obj = form.save(commit=False)
+            if request.user.is_authenticated:
+                obj.created_by = request.user
+            obj.save()
+
+            # redirects to same page that made this POST request
+            response = HttpResponse()
+            response["HX-Redirect"] = request.META.get("HTTP_REFERER")
+            return response
+    else:
+        form = TransactionForm(instance=transaction)
+
+    context = {"form": form}
+
+    return render(request, "dyn_dt/transaction_modal_form.html", context=context)
+
+
+# @login_required
+@require_http_methods(["GET"])
+def transaction_confirm_delete(request, pk):
+    """
+    A get request to display modal popups right
+    before user proceeds with deleting a Transaction.
+    """
+
+    transaction = get_object_or_404(Transaction, pk=pk)
+    context = {"transaction": transaction}
+    return render(
+        request,
+        "dyn_dt/transaction_delete_confirmation.html",
+        context=context,
+    )
+
+
+# @login_required
+@require_http_methods(["DELETE"])
+def transaction_delete(request, pk):
+    """
+    Function to delete an existing Transaction.
+    """
+
+    transaction = get_object_or_404(Transaction, pk=pk)
+    transaction.delete()
+
+    # redirects to same page that made this POST request
+    response = HttpResponse()
+    response["HX-Redirect"] = request.META.get("HTTP_REFERER")
+    return response
 
 
 def name_to_class(name: str) -> ModelBase | None:
@@ -39,8 +118,7 @@ def name_to_class(name: str) -> ModelBase | None:
 
         # If all good, a class is returned
         return getattr(module, cls_name)
-    except:
-
+    except Exception:
         # Nothing found, bozzo input
         return None
 
@@ -68,11 +146,22 @@ def get_model_fk_values(model_class):
 
 
 def index(request):
+    # filter queryset with query params
+    qs = Transaction.objects.all()
+    transaction_filter = TransactionDataTablesFilter(request.GET, queryset=qs)
+
+    # hook queryset into table
+    table = TransactionDataTables(transaction_filter.qs)
+
+    # apply pagination + sorting
+    RequestConfig(request, paginate={"per_page": 10}).configure(table)
 
     context = {
         "routes": settings.DYNAMIC_DATATB.keys(),
         "segment": "dynamic_dt",
         "user": request.user,
+        "table": table,
+        "filter": transaction_filter,
     }
 
     return render(request, "dyn_dt/index.html", context)
@@ -142,6 +231,15 @@ def display_datatables(request, model_path: str):
     """
     Function to display datatables on the frontend.
     """
+    # filter queryset with query params
+    qs = Transaction.objects.all()
+    transaction_filter = TransactionDataTablesFilter(request.GET, queryset=qs)
+
+    # hook queryset into table
+    table = TransactionDataTables(transaction_filter.qs)
+
+    # apply pagination + sorting
+    RequestConfig(request, paginate={"per_page": 5}).configure(table)
 
     model_name = None
     model_class = None
@@ -252,6 +350,8 @@ def display_datatables(request, model_path: str):
         "choices_dict": choices_dict,
         "segment": "dynamic_dt",
         "user": request.user,
+        "table": table,
+        "filter": transaction_filter,
     }
     return render(request, "dyn_dt/datatables.html", context)
 
@@ -329,12 +429,10 @@ def update(request, model_path, id):
 
     if request.method == "POST":
         for attribute, value in request.POST.items():
-
             if attribute == "csrfmiddlewaretoken":
                 continue
 
             if getattr(item, attribute, value) is not None:
-
                 # Process FKs
                 if attribute in fk_fields.keys():
                     if attribute == "created_by":

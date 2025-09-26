@@ -1,20 +1,17 @@
 from djangorestframework_camel_case.parser import CamelCaseJSONParser
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework.decorators import action
 from djangorestframework_camel_case.render import (
     CamelCaseBrowsableAPIRenderer,
     CamelCaseJSONRenderer,
 )
 from drf_spectacular.utils import extend_schema, extend_schema_view
-from rest_framework import permissions, viewsets, status
+from rest_framework import permissions, viewsets
 from rest_framework.filters import SearchFilter
-from rest_framework.response import Response
 
-from apps.pages.models import Transaction, Category
+from apps.pages.models import Transaction
 from .filters import TransactionFilter
-from .filters import TransactionFilter, CategoryFilter
 
-from .serializers import TransactionSerializer, CategorySerializer
+from .serializers import TransactionSerializer
 
 from .openapi_schema import (
     CREATE_TRANSACTION_REQUEST_PAYLOAD,

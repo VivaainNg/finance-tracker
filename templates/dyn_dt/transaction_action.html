@@ -1,0 +1,17 @@
+<button
+    class="btn btn-sm btn-primary"
+    hx-get="{% url 'transactions-edit' pk=transaction.pk %}"
+    hx-target="#modal-body"
+    data-bs-toggle="modal"
+    data-bs-target="#transactionModal">
+Edit
+</button>
+
+<button
+    class="btn btn-sm btn-danger"
+    hx-get="{% url 'transactions-confirm-delete' pk=transaction.pk %}"
+    hx-target="#modal-body"
+    data-bs-toggle="modal"
+    data-bs-target="#transactionModal">
+  Delete
+</button>

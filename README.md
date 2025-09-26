@@ -126,20 +126,6 @@ Within the download you'll find the following directories and files:
 ```
 
 <br />
-<!---->
-<!-- ## Deploy on [Render](https://render.com/) -->
-<!---->
-<!-- - Create a Blueprint instance -->
-<!--   - Go to https://dashboard.render.com/blueprints this link. -->
-<!-- - Click `New Blueprint Instance` button. -->
-<!-- - Connect your `repo` which you want to deploy. -->
-<!-- - Fill the `Service Group Name` and click on `Update Existing Resources` button. -->
-<!-- - After that your deployment will start automatically. -->
-<!---->
-<!-- At this point, the product should be LIVE. -->
-<!---->
-<!-- <br /> -->
-<!---->
 
 ## Resources
 
@@ -148,6 +134,7 @@ Within the download you'll find the following directories and files:
 - [django-rest-framework](https://github.com/encode/django-rest-framework): For exposing RESTful API on top of Django framework.
 - [drf-spectacular](https://github.com/tfranzel/drf-spectacular): For generating OpenAPI 3 schema on top of DRF.
 - [ruff](https://github.com/astral-sh/ruff) with [pre-commit](https://github.com/pre-commit/pre-commit): To standardize proper linting/formatting code styles.
+- [django-tables2](https://github.com/jieter/django-tables2): For ease of generating HTML datatables on the front-end templates.
 
 <br />
 
@@ -165,9 +152,11 @@ Within the download you'll find the following directories and files:
 
 * [ ] Update to proper graphs/charts in dashboard.
 
-* [ ] Implement HTMX at frontend.
-
 * [ ] Implement proper CBV to replace current FBV when rendering dynamic tables.
+
+* [ ] Resolve corrupt session data issues.
+
+* [ ] Implement "forget password" features.
 
 * [X] Implement [DRF Router](https://www.django-rest-framework.org/api-guide/routers/) for mapping of URL with views.
 

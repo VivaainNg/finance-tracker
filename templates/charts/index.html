@@ -40,8 +40,10 @@
 <script>
   document.addEventListener("DOMContentLoaded", function() {
     var products = JSON.parse('{{ products|escapejs }}');
-    var names = products.map(p => p.fields.name);
-    var prices = products.map(p => p.fields.price);
+    var transactions = JSON.parse('{{ transactions|escapejs }}');
+
+    var names = transactions.map(p => p.fields.transaction_type);
+    var prices = transactions.map(p => p.fields.amount);
 
     var barOptions = {
       chart: { type: 'bar', height: 350 },
