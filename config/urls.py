@@ -19,7 +19,6 @@ from django.urls import include, path
 from rest_framework.authtoken.views import obtain_auth_token  # <-- NEW
 
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
-from django.views.generic import RedirectView
 
 urlpatterns = [
     path("", include("apps.pages.urls")),
@@ -42,5 +41,5 @@ urlpatterns = [
 try:
     urlpatterns.append(path("api/", include("api.urls")))
     urlpatterns.append(path("login/jwt/", view=obtain_auth_token))
-except:
+except Exception:
     pass

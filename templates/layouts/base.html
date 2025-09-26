@@ -16,6 +16,9 @@
 </head>
 
 <body class="{% block bodyclass %}{% endblock bodyclass %}">
+    <!-- hidden csrf token for HTMX -->
+    <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+
     <div class="wrapper">
         {% block sidebar %}
         {% include 'includes/sidebar.html' %}
@@ -30,9 +33,9 @@
             {% endblock footer %}
         </div>
     </div>
-    {% block fixed-plugin %}
-    {% include 'includes/fixed-plugin.html' %}
-    {% endblock fixed-plugin %}
+    <!-- {% block fixed-plugin %} -->
+    <!-- {% include 'includes/fixed-plugin.html' %} -->
+    <!-- {% endblock fixed-plugin %} -->
     {% include 'includes/scripts.html' %}
     {% block extrajs %}{% endblock extrajs %}
 </body>

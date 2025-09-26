@@ -17,6 +17,11 @@
 <script src="{% static 'assets/demo/demo.js' %}"></script>
 <script src="{% static 'assets/js/themeSettings.js' %}"></script>
 
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<!-- HTMX JS -->
+<script src="https://unpkg.com/htmx.org@1.9.10"></script>
+
 <script>
     $(document).ready(function () {
         // Javascript method's body can be found in assets/js/demos.js
@@ -32,3 +37,35 @@
             application: "black-dashboard-free"
         });
 </script>
+
+
+<script>
+    document.body.addEventListener("htmx:configRequest", (event) => {
+      const token = document.querySelector("[name=csrfmiddlewaretoken]")?.value;
+      if (token) {
+        event.detail.headers["X-CSRFToken"] = token;
+      }
+    });
+</script>
+
+<!-- To display notifications on top right corner -->
+{% if messages %}
+<script>
+  $(function () {
+    {% for message in messages %}
+      $.notify({
+        message: "{{ message|escapejs }}"
+      },{
+        type: "{% if message.tags %}{{ message.tags }}{% else %}info{% endif %}",
+        allow_dismiss: true,
+        placement: {
+          from: "top",
+          align: "right"
+        },
+        delay: 3000,
+        timer: 1000,
+      });
+    {% endfor %}
+  });
+</script>
+{% endif %}

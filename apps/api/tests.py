@@ -6,6 +6,7 @@ from apps.pages.models import Transaction, Category
 from model_bakery import baker
 
 from django.contrib.auth import get_user_model
+
 User = get_user_model()
 
 
@@ -16,9 +17,7 @@ class TransactionViewSetTestCase(APITestCase):
 
     @classmethod
     def setUpTestData(cls):
-        cls.user = User.objects.create_user(
-            username="tester", password="password123"
-        )
+        cls.user = User.objects.create_user(username="tester", password="password123")
         cls.category = baker.make(Category, name="Food")
         cls.transaction = baker.make(
             Transaction,
@@ -42,13 +41,17 @@ class TransactionViewSetTestCase(APITestCase):
     def test_get(self):
         """Test GET single transaction by ID"""
         transaction = Transaction.objects.first()
-        response = self.client.get(reverse("transactions-detail", args=[transaction.pk]))
+        response = self.client.get(
+            reverse("transactions-detail", args=[transaction.pk])
+        )
         json_data = response.json()
 
         self.assertTrue(is_success(response.status_code))
         self.assertEqual(json_data["amount"], "150.50")
         self.assertEqual(json_data["paymentType"], Transaction.PaymentType.CASH)
-        self.assertEqual(json_data["transactionType"], Transaction.TransactionType.EXPENSES)
+        self.assertEqual(
+            json_data["transactionType"], Transaction.TransactionType.EXPENSES
+        )
         self.assertEqual(json_data["remarks"], "Lunch")
 
     def test_post(self):
@@ -106,6 +109,4 @@ class TransactionViewSetTestCase(APITestCase):
 
         response = self.client.delete(delete_url)
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
-
         self.assertFalse(Transaction.objects.filter(pk=transaction.pk).exists())
-

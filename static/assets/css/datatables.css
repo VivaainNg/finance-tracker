@@ -1,0 +1,30 @@
+/* For Datatables mobile-responsive behaviour */
+@media screen and (max-width: 576px) {
+  table thead {
+    display: none;
+  }
+  table tr {
+    display: block;
+    margin-bottom: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 0.5rem;
+  }
+  table td {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.5rem;
+  }
+  table td::before {
+    content: attr(data-label);
+    font-weight: bold;
+    margin-right: 0.5rem;
+  }
+}
+
+/* Fill up the entire column under Actions when in mobile view */
+@media (max-width: 768px) {
+  td.actions-col {
+    flex-direction: column;
+  }
+}

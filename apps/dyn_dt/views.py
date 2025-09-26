@@ -1,28 +1,219 @@
 from decimal import Decimal
-from typing import Union
+from typing import Any
+from urllib.parse import urlparse, parse_qs
+from django.contrib import messages
+import pandas as pd
+from django.views.decorators.http import require_http_methods
+from .forms import TransactionForm
+from apps.dyn_dt.filters import TransactionDataTablesFilter
+from apps.dyn_dt.tables import TransactionDataTables
+from django_tables2 import RequestConfig
 import django
 from django.db.models.base import ModelBase
-import requests, base64, json, csv
+import json
+import csv
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
-from django.utils import timezone
-from django.http import HttpResponse, JsonResponse
-from django.utils.safestring import mark_safe
+from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.conf import settings
 from django.urls import reverse
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
-from django.urls import reverse
 from django.views import View
 from django.db import models
-from pprint import pp
 import importlib
 
 from apps.dyn_dt.models import ModelFilter, PageItems, HideShowFilter
 from apps.dyn_dt.utils import user_filter
-from apps.pages.models import Category, Transaction
+from apps.pages.models import Transaction
 from apps.pages.utils import localtime_now
 
-# from cli import *
+from django_filters.views import FilterView
+from django_tables2.views import SingleTableMixin
+
+
+class TransactionListView(SingleTableMixin, FilterView):
+    """
+    Views to display Transaction's datatables.
+    """
+
+    table_class = TransactionDataTables
+    model = Transaction
+    filterset_class = TransactionDataTablesFilter
+    template_name = "dyn_dt/datatables_layout.html"
+
+
+# @login_required
+@require_http_methods(["GET", "POST"])
+def transaction_modal(request: HttpRequest, pk: int | None = None):
+    """
+    Function to create an new Transaction model,
+    or updates an existing ones via modal.
+    """
+
+    transaction = (
+        get_object_or_404(Transaction, pk=pk)
+        if pk
+        else Transaction(created_by=request.user)
+    )
+
+    if request.method == "POST":
+        form = TransactionForm(request.POST, instance=transaction)
+        if form.is_valid():
+            obj = form.save(commit=False)
+            if request.user.is_authenticated:
+                obj.created_by = request.user
+            obj.save()
+
+            # redirects to same page that made this POST request
+            response = HttpResponse()
+            response["HX-Redirect"] = request.META.get("HTTP_REFERER")
+            messages.success(request, "Success!")
+            return response
+    else:
+        form = TransactionForm(instance=transaction)
+
+    context = {"form": form}
+
+    return render(request, "dyn_dt/transaction_modal_form.html", context=context)
+
+
+# @login_required
+@require_http_methods(["GET"])
+def transaction_confirm_delete(request: HttpRequest, pk: int):
+    """
+    A get request to display modal popups right
+    before user proceeds with deleting a Transaction.
+    """
+
+    transaction = get_object_or_404(Transaction, pk=pk)
+    context = {"transaction": transaction}
+    return render(
+        request,
+        "dyn_dt/transaction_delete_confirmation.html",
+        context=context,
+    )
+
+
+# @login_required
+@require_http_methods(["DELETE"])
+def transaction_delete(request: HttpRequest, pk: int):
+    """
+    Function to delete an existing Transaction.
+    """
+
+    transaction = get_object_or_404(Transaction, pk=pk)
+    transaction.delete()
+
+    # redirects to same page that made this POST request
+    response = HttpResponse()
+    response["HX-Redirect"] = request.META.get("HTTP_REFERER")
+    messages.success(request, "Successfully deleted the Transaction.")
+    return response
+
+
+class TransactionsExportView(View):
+    """
+    Views to export Transactions from datatables.
+    """
+
+    def extract_query_params(self, request: HttpRequest) -> dict[str, Any]:
+        """
+        Function to extract query params from HTTP_REFERER.
+
+        I.e:
+
+        Assuming HTTP_REFERER request URL is:
+        ?remarks=a&payment_type=Card&transaction_type=Expenses&category=1
+
+        Then extracted query params returned would be:
+
+        {
+            'remarks': ['a'],
+            'payment_type': ['Card'],
+            'transaction_type': ['Expenses'],
+            'category': ['1'],
+        }
+        """
+
+        referer = request.META.get("HTTP_REFERER", "")
+        query_params = {}
+
+        if referer:
+            parsed_url = urlparse(referer)
+            query_params = parse_qs(parsed_url.query)
+
+        return query_params
+
+    def get(self, request: HttpRequest, format: str):
+        """
+        Export based on format (either "csv" or "xlsx").
+        """
+
+        query_params = self.extract_query_params(request)
+        qs = (
+            Transaction.objects.select_related(
+                "category",
+                "created_by",
+            )
+            .all()
+            .values_list(
+                "date_time",
+                "amount",
+                "payment_type",
+                "category__name",
+                "transaction_type",
+                "remarks",
+                "created_by__username",
+            )
+            .order_by("-date_time")
+        )
+
+        if "remarks" in query_params and query_params["remarks"][0] != "":
+            qs = qs.filter(remarks__icontains=query_params["remarks"][0])
+
+        if "payment_type" in query_params and query_params["payment_type"][0] != "":
+            qs = qs.filter(payment_type=query_params["payment_type"][0])
+
+        if (
+            "transaction_type" in query_params
+            and query_params["transaction_type"][0] != ""
+        ):
+            qs = qs.filter(transaction_type=query_params["transaction_type"][0])
+
+        if "category" in query_params and query_params["category"]:
+            qs = qs.filter(category__pk__in=query_params["category"])
+
+        df = pd.DataFrame(
+            qs,
+            columns=[
+                "Datetime",
+                "Amount(RM)",
+                "Payment Type",
+                "Category",
+                "Transaction Type",
+                "Remarks",
+                "Created By",
+            ],
+        )
+        df["Datetime"] = df["Datetime"].dt.strftime("%Y-%m-%d %H:%M:%S")
+
+        if format == "csv":
+            response = HttpResponse(content_type="text/csv")
+            response["Content-Disposition"] = 'attachment; filename="transactions.csv"'
+            df.to_csv(path_or_buf=response, index=False)
+            return response
+
+        elif format == "xlsx":
+            response = HttpResponse(
+                content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+            )
+            response["Content-Disposition"] = 'attachment; filename="transactions.xlsx"'
+            with pd.ExcelWriter(response, engine="openpyxl") as writer:
+                df.to_excel(writer, index=False)
+            return response
+
+        # fallback if unsupported format
+        return HttpResponse("Format not supported", status=400)
 
 
 def name_to_class(name: str) -> ModelBase | None:
@@ -39,8 +230,7 @@ def name_to_class(name: str) -> ModelBase | None:
 
         # If all good, a class is returned
         return getattr(module, cls_name)
-    except:
-
+    except Exception:
         # Nothing found, bozzo input
         return None
 
@@ -68,11 +258,22 @@ def get_model_fk_values(model_class):
 
 
 def index(request):
+    # filter queryset with query params
+    qs = Transaction.objects.all()
+    transaction_filter = TransactionDataTablesFilter(request.GET, queryset=qs)
+
+    # hook queryset into table
+    table = TransactionDataTables(transaction_filter.qs)
+
+    # apply pagination + sorting
+    RequestConfig(request, paginate={"per_page": 10}).configure(table)
 
     context = {
         "routes": settings.DYNAMIC_DATATB.keys(),
         "segment": "dynamic_dt",
         "user": request.user,
+        "table": table,
+        "filter": transaction_filter,
     }
 
     return render(request, "dyn_dt/index.html", context)
@@ -142,6 +343,15 @@ def display_datatables(request, model_path: str):
     """
     Function to display datatables on the frontend.
     """
+    # filter queryset with query params
+    qs = Transaction.objects.all()
+    transaction_filter = TransactionDataTablesFilter(request.GET, queryset=qs)
+
+    # hook queryset into table
+    table = TransactionDataTables(transaction_filter.qs)
+
+    # apply pagination + sorting
+    RequestConfig(request, paginate={"per_page": 5}).configure(table)
 
     model_name = None
     model_class = None
@@ -252,6 +462,8 @@ def display_datatables(request, model_path: str):
         "choices_dict": choices_dict,
         "segment": "dynamic_dt",
         "user": request.user,
+        "table": table,
+        "filter": transaction_filter,
     }
     return render(request, "dyn_dt/datatables.html", context)
 
@@ -329,12 +541,10 @@ def update(request, model_path, id):
 
     if request.method == "POST":
         for attribute, value in request.POST.items():
-
             if attribute == "csrfmiddlewaretoken":
                 continue
 
             if getattr(item, attribute, value) is not None:
-
                 # Process FKs
                 if attribute in fk_fields.keys():
                     if attribute == "created_by":

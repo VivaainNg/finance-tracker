@@ -1,10 +1,4 @@
-import os
-from typing import Optional
-
 from django.core.exceptions import MultipleObjectsReturned
-import numpy as np
-import pandas as pd
-from django.conf import settings
 from django.core.management.base import BaseCommand
 from django.db import IntegrityError, transaction
 from apps.pages.models import Category
@@ -35,10 +29,6 @@ class Command(BaseCommand):
             "Transportation",
             "Health",
             "Entertainment",
-            "Social Life",
-            "Household",
-            "Education",
-            "Insurance",
             "Investment",
             "Other",
         ]

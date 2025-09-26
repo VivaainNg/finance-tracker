@@ -13,10 +13,13 @@ requests==2.32.3
 pandas==2.2.3
 graphviz==0.20.3
 astor==0.8.1
-pre_commit==4.2.0
 djangorestframework-camel-case==1.4.2
 django-filter==25.1
 model-bakery==1.20.5
+django-tables2==2.7.5
+crispy-bootstrap5==2025.6
+django-crispy-forms==2.4
+openpyxl==3.1.5
 
 # API docs via Swagger/OpenAPI
 drf-spectacular==0.28.0
@@ -31,3 +34,7 @@ gunicorn==23.0.0
 #psycopg2-binary==2.9.9
 #mysqlclient==2.1.1
 django-dbbackup==4.2.1
+
+# Linters/formatters/pycodestyles
+ruff==0.13.2
+pre_commit==4.2.0

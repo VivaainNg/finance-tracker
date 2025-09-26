@@ -550,3 +550,63 @@ form .related-widget-wrapper ul {
 .clearable-file-input input {
     margin-top: 0;
 }
+
+
+/* CSS FOR CUSTOM HTMX Modal */
+
+.custom-modal {
+    background: linear-gradient(135deg, #6a0dad, #ff1493); /* purple → pink */
+    color: #fff;
+    border-radius: 1rem;
+    box-shadow: 0 0 25px rgba(255, 20, 147, 0.6); /* pink glow */
+}
+
+.custom-modal .modal-header,
+.custom-modal .modal-footer {
+    border: none;
+}
+
+.custom-modal .modal-body {
+    background-color: rgba(0, 0, 0, 0.2); /* subtle dark overlay */
+    border-radius: 0.5rem;
+}
+
+.custom-modal .form-control {
+    background-color: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: #fff;
+}
+
+.custom-modal .form-control:focus {
+    background-color: rgba(255, 255, 255, 0.2);
+    border-color: #ff69b4; /* hot pink border on focus */
+    box-shadow: 0 0 5px #ff69b4;
+}
+
+.custom-modal label {
+    color: #fff; /* make form labels white */
+    font-weight: 500; /* optional: a lil bolder for readability */
+}
+
+.form-check-input {
+    visibility: visible !important;
+    opacity: 1 !important;
+    /* default ~1rem, make it bigger */
+    width: 1.5rem;
+    height: 1.5rem;
+    vertical-align: middle;   /* instead of baseline */
+    margin-top: 0;
+}
+
+.form-check-label {
+    /* match bigger box with bigger text */
+    font-size: 1.25rem;
+    height: 1.5rem;
+}
+
+.form-check {
+    padding-left: 2rem !important;
+    display: flex;
+    align-items: center; /* aligns input + label middle */
+    gap: 0.5rem;         /* space between */
+}

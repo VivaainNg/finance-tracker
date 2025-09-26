@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.core import serializers
-from apps.pages.models import Product, Transaction, Category
+from apps.pages.models import Product, Transaction
 
 # Create your views here.
 

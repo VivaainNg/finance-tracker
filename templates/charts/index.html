@@ -5,22 +5,23 @@
 
 {% block content %}
 <div class="content">
-    <div class="row">
-      <!-- [ Bar Chart ] start -->
-      <div class="col-sm-12 col-md-6">
-        <div class="card">
-          <div class="card-header">
-            <h5>Bar Chart</h5>
-          </div>
-          <div class="card-body text-center">
-            <div id="bar-chart"></div>
-          </div>
+  <!-- Bar Chart -->
+  <div class="row">
+    <div class="col">
+      <div class="card">
+        <div class="card-header">
+          <h5>Bar Chart</h5>
+        </div>
+        <div class="card-body text-center">
+          <div id="bar-chart"></div>
         </div>
       </div>
-      <!-- [ Bar Chart ] end -->
+    </div>
+  </div>
 
-      <!-- [ Pie Chart ] start -->
-      <div class="col-sm-12 col-md-6">
+  <!-- Pie Chart -->
+    <div class="row">
+      <div class="col">
         <div class="card">
           <div class="card-header">
             <h5>Pie Chart</h5>
@@ -40,8 +41,10 @@
 <script>
   document.addEventListener("DOMContentLoaded", function() {
     var products = JSON.parse('{{ products|escapejs }}');
-    var names = products.map(p => p.fields.name);
-    var prices = products.map(p => p.fields.price);
+    var transactions = JSON.parse('{{ transactions|escapejs }}');
+
+    var names = transactions.map(p => p.fields.transaction_type);
+    var prices = transactions.map(p => p.fields.amount);
 
     var barOptions = {
       chart: { type: 'bar', height: 350 },

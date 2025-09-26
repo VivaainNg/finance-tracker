@@ -10,7 +10,9 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
-import os, random, string
+import os
+import random
+import string
 from pathlib import Path
 
 # from dotenv import load_dotenv
@@ -61,6 +63,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "django_extensions",
     "django_filters",
+    "django_tables2",
     # OpenAPI schema/docs
     "drf_spectacular",
     "drf_spectacular_sidecar",
@@ -71,9 +74,18 @@ INSTALLED_APPS = [
     # Charts
     "apps.charts",
     # Tooling API-GEN
-    "rest_framework",  # Include DRF           # <-- NEW
-    "rest_framework.authtoken",  # Include DRF Auth      # <-- NEW
+    "rest_framework",
+    "rest_framework.authtoken",
+    # For Bootstrap5 styling on form fields
+    "crispy_forms",
+    "crispy_bootstrap5",
 ]
+
+# https://github.com/django-crispy-forms/django-crispy-forms
+# https://pypi.org/project/crispy-bootstrap5/
+CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
+CRISPY_TEMPLATE_PACK = "bootstrap5"
+
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
