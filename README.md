@@ -1,17 +1,30 @@
 # Personal Finance Tracker
 [![Django CI](https://github.com/VivaainNg/finance-tracker/actions/workflows/django-ci.yml/badge.svg)](https://github.com/VivaainNg/finance-tracker/actions/workflows/django-ci.yml)
 
+![Personal Finance Tracker](https://i.imgur.com/8hxY4f0.png)
+
+
+## Table of Contents
+- [Basic Requirements/Pre-requisites](#basic-requirementspre-requisites)
+- [Setups](#setups)
+- [Usage](docs/README-usage.md)
+- [Resources](#resources)
+
+<br />
+
+---
+
 ## Basic Requirements/Pre-requisites
 
 - [Python3](https://www.python.org/downloads/) (Version 3.12+ preferably, in my case I'm specifically using [version 3.12.2](https://www.python.org/downloads/release/python-3122/))
 - [git](https://git-scm.com/downloads)
 
 
-### Installing
+## Setups
 
 A step by step guide on how to setup your local Python environment for this project.
 
-1. Once you've installed git in your system, clone this repo into your local:
+1. Once you've installed both Python and git in your system, clone this repo into your local:
 ```bash
 $ git clone git@github.com:VivaainNg/finance-tracker.git
 ```
@@ -52,7 +65,6 @@ $ pip install -r requirements.txt
 
 <br />
 
-## Running Django web application on your local system:
 5. Sync database based on latest DB's migration files (courtesy of Django's out-of-the-box ORM):
 
 ```bash
@@ -60,7 +72,7 @@ $ python manage.py makemigrations
 $ python manage.py migrate
 ```
 
-> Run the following script to populate DB with some Categories.
+6. Run the command below to populate DB with some Categories.
 
 ```bash
 $ python manage.py initialize_category -c
@@ -68,7 +80,7 @@ $ python manage.py initialize_category -c
 
 <br />
 
-6. Jumpstart the Django web on your local:
+7. Jumpstart the Django web on your local:
 ```bash
 $ python manage.py runserver
 ```
@@ -77,6 +89,9 @@ At this point, the app runs at `http://127.0.0.1:8000/`.
 
 > Note: To use the app, please access the registration page and create a new user. After authentication, the app will unlock the private pages.
 
+<br/>
+
+8. To read more on exploring/testing around this on your local, [click on this link](docs/README-usage.md)
 
 <br />
 
@@ -88,12 +103,12 @@ $ python manage.py test apps.api -v 2
 
 <br />
 
-## Continuous Integration (CI)
+### Continuous Integration (CI)
 - For continuous integration, a [Github Action](https://github.com/features/actions) configuration `.github/workflows/django-ci.yml` is included.
 
 <br />
 
-## Setup Linters/formatters/code styles
+### Setup Linters/formatters/code styles
 - I use pre-commit to standardize the linters, formatters in this repo. Go ahead with:
 ```bash
 $ pre-commit install # Only need to run once
@@ -106,7 +121,7 @@ $ djlint templates/ --reformat
 ```
 <br />
 
-## File Structure
+### File Structure
 Within the download you'll find the following directories and files:
 
 ```bash
@@ -131,7 +146,7 @@ Within the download you'll find the following directories and files:
 
 <br />
 
-## Resources
+### Resources
 
 - [Black Dashboard Django](https://github.com/creativetimofficial/black-dashboard-django): The main inspiration & template themes that I've been using for this project.
 - [Django](https://github.com/django/django): Base framework for the backend of this project.
@@ -154,7 +169,7 @@ Within the download you'll find the following directories and files:
 
 * [X] Implement documentations/steps on how to utilize the DRF's exposed API (preferably Swagger-like docs).
 
-* [ ] Update to proper graphs/charts in dashboard.
+* [X] Update to proper graphs/charts in dashboard.
 
 * [X] Implement proper CBV to replace current FBV when rendering dynamic tables.
 
