@@ -60,7 +60,7 @@ $ python manage.py makemigrations
 $ python manage.py migrate
 ```
 
-> OPTIONAL: You can also run the following script to populate DB with ready-made Categories.
+> Run the following script to populate DB with some Categories.
 
 ```bash
 $ python manage.py initialize_category -c
@@ -93,11 +93,16 @@ $ python manage.py test apps.api -v 2
 
 <br />
 
-## Setup pre-commit
+## Setup Linters/formatters/code styles
 - I use pre-commit to standardize the linters, formatters in this repo. Go ahead with:
 ```bash
 $ pre-commit install # Only need to run once
 $ pre-commit run --all-files
+```
+
+- To standardize the Django templates format across the HTML files via `.djlintrc`, run:
+```bash
+$ djlint templates/ --reformat
 ```
 <br />
 
@@ -113,9 +118,8 @@ Within the download you'll find the following directories and files:
    |
    |-- apps/
    |    |-- charts                       # Serve Charts
-   |    |-- apis                         # API endpoints
-   |    |-- dyn_dt                       # APP Models & Datatables
-   |    |-- pages                        # Serve UI pages
+   |    |-- apis                         # API endpoints & scripts
+   |    |-- pages                        # Serve UI pages and storing app models
    |
    |-- requirements.txt                  # Project Dependencies
    |
@@ -152,7 +156,7 @@ Within the download you'll find the following directories and files:
 
 * [ ] Update to proper graphs/charts in dashboard.
 
-* [ ] Implement proper CBV to replace current FBV when rendering dynamic tables.
+* [X] Implement proper CBV to replace current FBV when rendering dynamic tables.
 
 * [ ] Resolve corrupt session data issues.
 

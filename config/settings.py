@@ -69,8 +69,7 @@ INSTALLED_APPS = [
     "drf_spectacular_sidecar",
     # Serve UI pages
     "apps.pages",
-    # Dynamic DT
-    "apps.dyn_dt",
+    "apps.api",
     # Charts
     "apps.charts",
     # Tooling API-GEN
@@ -203,13 +202,6 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 LOGIN_REDIRECT_URL = "/"
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
-# ### DYNAMIC_DATATB Settings ###
-DYNAMIC_DATATB = {
-    # SLUG -> Import_PATH
-    "product": "apps.pages.models.Product",
-    "transaction": "apps.pages.models.Transaction",
-    "category": "apps.pages.models.Category",
-}
 ########################################
 
 REST_FRAMEWORK = {

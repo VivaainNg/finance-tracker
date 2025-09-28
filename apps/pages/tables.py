@@ -11,7 +11,7 @@ class TransactionDataTables(tables.Table):
 
     actions = tables.TemplateColumn(
         verbose_name=_("Actions"),
-        template_name="dyn_dt/transaction_action.html",
+        template_name="pages/transaction_action.html",
         attrs={"td": {"class": "actions-col"}},
         orderable=False,
     )

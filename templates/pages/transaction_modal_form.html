@@ -1,0 +1,11 @@
+{% load crispy_forms_tags %}
+<form method="post"
+      hx-post="{% if form.instance.pk %} {% url 'transactions-update' pk=form.instance.pk %} {% else %} {% url 'transactions-create' %} {% endif %}"
+      hx-target="div.table-container"
+      hx-swap="outerHTML">
+  {% csrf_token %}
+  {{ form|crispy }}
+  <div class="d-flex justify-content-end mt-3">
+    <button type="submit" class="btn btn-primary">Save</button>
+  </div>
+</form>

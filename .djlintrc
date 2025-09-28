@@ -1,0 +1,6 @@
+{
+  "indent": 2,
+  "wrap-tags": ["div", "ul", "li", "table", "tr", "td"],
+  "wrap-length": 120,
+  "report": "text"
+}

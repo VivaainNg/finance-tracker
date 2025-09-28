@@ -6,16 +6,6 @@ from django.conf import settings
 from django.contrib.auth.models import AbstractUser
 
 
-class Product(models.Model):
-    id = models.AutoField(primary_key=True)
-    name = models.CharField(max_length=100)
-    info = models.CharField(max_length=100, default="")
-    price = models.IntegerField(blank=True, null=True)
-
-    def __str__(self):
-        return self.name
-
-
 class User(AbstractUser):
     """
     Model for User class, inheriting from AbstractUser which
@@ -48,7 +38,6 @@ class Transaction(models.Model):
     class TransactionType(models.TextChoices):
         INCOME = "Income", _("Income")
         EXPENSES = "Expenses", _("Expenses")
-        MISCELLANEOUS = "Miscellaneous", _("Miscellaneous")
 
     class PaymentType(models.TextChoices):
         CASH = "Cash", _("Cash")

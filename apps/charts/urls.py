@@ -1,7 +1,8 @@
 from django.urls import path
 
-from apps.charts import views
+from apps.charts.views import DisplayChartsView
+
 
 urlpatterns = [
-    path("", views.index, name="charts"),
+    path("", DisplayChartsView.as_view(), name="charts"),
 ]

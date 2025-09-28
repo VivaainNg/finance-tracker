@@ -28,3 +28,39 @@
     flex-direction: column;
   }
 }
+
+/* Override pagination styling for datatables */
+.table-container .pagination {
+    display: flex;
+    justify-content: center;
+    list-style: none;
+    padding: 0;
+    margin: 20px 0;
+    gap: 8px;
+}
+
+.table-container .pagination li a {
+    display: block;
+    padding: 8px 12px;
+    background-color: #f0f0f0;
+    color: #333;
+    text-decoration: none;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+}
+
+.table-container .pagination li a:hover {
+    background-color: #ffb6c1;
+    color: #fff;
+}
+
+.table-container .pagination li.active a {
+    background-color: #ff69b4;
+    color: #fff;
+    font-weight: bold;
+}
+
+.table-container .pagination li.disabled a {
+    opacity: 0.5;
+    pointer-events: none;
+}

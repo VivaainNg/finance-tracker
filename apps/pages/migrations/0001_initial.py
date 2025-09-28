@@ -193,7 +193,6 @@ class Migration(migrations.Migration):
                         choices=[
                             ("Income", "Income"),
                             ("Expenses", "Expenses"),
-                            ("Miscellaneous", "Miscellaneous"),
                         ],
                         default="Income",
                         max_length=16,

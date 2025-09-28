@@ -1,66 +1,94 @@
 {% extends "layouts/base.html" %}
 {% load static %}
-
-{% block title %}Charts{% endblock title %}
-
+{% block title %}
+  Charts
+{% endblock title %}
 {% block content %}
-<div class="content">
-  <!-- Bar Chart -->
-  <div class="row">
-    <div class="col">
-      <div class="card">
-        <div class="card-header">
-          <h5>Bar Chart</h5>
-        </div>
-        <div class="card-body text-center">
-          <div id="bar-chart"></div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Pie Chart -->
+  <div class="content">
+    <!-- Bar Chart -->
     <div class="row">
       <div class="col">
         <div class="card">
           <div class="card-header">
-            <h5>Pie Chart</h5>
+            <h5>Amount by Categories</h5>
+          </div>
+          <div class="card-body text-center">
+            <div id="bar-chart"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Pie Chart -->
+    <div class="row">
+      <div class="col">
+        <div class="card">
+          <div class="card-header">
+            <h5>Amount by Categories</h5>
           </div>
           <div class="card-body text-center">
             <div id="pie-chart"></div>
           </div>
         </div>
       </div>
-      <!-- [ Pie Chart ] end -->
     </div>
-</div>
+  </div>
 {% endblock content %}
-
 {% block extrajs %}
-<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
-<script>
+  <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+  <script>
   document.addEventListener("DOMContentLoaded", function() {
-    var products = JSON.parse('{{ products|escapejs }}');
-    var transactions = JSON.parse('{{ transactions|escapejs }}');
-
-    var names = transactions.map(p => p.fields.transaction_type);
-    var prices = transactions.map(p => p.fields.amount);
+    // parse the JSON strings into JS arrays
+    var prices = JSON.parse('{{ amounts|escapejs }}');
+    var names = JSON.parse('{{ categories|escapejs }}');
 
     var barOptions = {
       chart: { type: 'bar', height: 350 },
       series: [{ name: 'Price', data: prices }],
-      xaxis: { categories: names }
+      xaxis: {
+        categories: names,
+        labels: {
+          style: { colors: '#ffffff' }
+        },
+      },
+      yaxis: {
+        labels: {
+          style: { colors: '#ffffff' }
+        },
+      },
+      tooltip: {
+        y: {
+          formatter: function(val) {
+            return `RM ${val.toLocaleString()}`;
+          }
+        }
+      },
     };
     var barChart = new ApexCharts(document.querySelector("#bar-chart"), barOptions);
     barChart.render();
 
     var pieOptions = {
-      chart: { type: 'pie', height: 350 },
+      chart: {
+        type: 'pie',
+        height: 350,
+      },
       series: prices,
-      labels: names
+      labels: names,
+      legend: {
+        position: 'left', // moves legend to the left of pie chart
+        labels: {
+          colors: '#ffffff',
+        }
+      },
+      tooltip: {
+        y: {
+          formatter: function(val) {
+            return `RM ${val.toLocaleString()}`;
+          }
+        }
+      },
     };
     var pieChart = new ApexCharts(document.querySelector("#pie-chart"), pieOptions);
     pieChart.render();
   });
-</script>
+  </script>
 {% endblock extrajs %}

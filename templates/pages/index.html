@@ -2,39 +2,58 @@
 {% load static get_attribute %}
 {% load crispy_forms_tags %}
 {% load render_table from django_tables2 %}
-{% load static %}
 {% block title %}
-  Dashboard
+  {% if page_title %}
+    page_title
+  {% else %}
+    Dynamic DataTables
+  {% endif %}
 {% endblock title %}
+{% block extrastyle %}
+  <style>
+        /* Pagination styling for django-tables2 */
+        .pagination {
+            display: flex;
+            justify-content: center; /* center the pagination */
+            list-style: none;
+            padding: 0;
+            margin: 20px 0;
+            gap: 8px; /* spacing between items */
+        }
+
+        /* pagination links */
+        .pagination li a {
+            display: block;
+            padding: 8px 12px;
+            background-color: #f0f0f0;
+            color: #333;
+            text-decoration: none;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+        }
+
+        /* hover effect */
+        .pagination li a:hover {
+            background-color: #ffb6c1; /* pink hover */
+            color: #fff;
+        }
+
+        /* active page */
+        .pagination li.active a {
+            background-color: #ff69b4; /* bright pink */
+            color: #fff;
+            font-weight: bold;
+        }
+
+        /* disabled / next-prev style */
+        .pagination li.disabled a {
+            opacity: 0.5;
+            pointer-events: none;
+        }
+  </style>
+{% endblock extrastyle %}
 {% block content %}
   <div class="content">
-    <div class="row">
-      <div class="col-md-4 mb-4">
-        <div class="card">
-          <div class="card-header">Total Income</div>
-          <div class="card-body text-white">
-            <h1>RM {{ total_income }}</h1>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-4 mb-4">
-        <div class="card">
-          <div class="card-header">Total Expenses</div>
-          <div class="card-body text-white">
-            <h1>RM {{ total_expenses }}</h1>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-4 mb-4">
-        <div class="card">
-          <div class="card-header">Remaining Balance</div>
-          <div class="card-body text-white">
-            <h1>RM {{ remaining_balance }}</h1>
-          </div>
-        </div>
-      </div>
-    </div>
-
     <div class="row">
       <!-- [ Typography ] start -->
       <div class="col-sm-12">
@@ -95,7 +114,7 @@
                       <button type="submit" class="btn btn-primary w-100">Apply Filter</button>
                     </div>
                     <div class="col-6 d-grid">
-                      <a href="{% url 'index' %}" class="btn btn-warning w-100">Clear Filter</a>
+                      <a href="{% url 'dynamic_dt' %}" class="btn btn-warning w-100">Clear Filter</a>
                     </div>
                   </div>
                 </div>
@@ -110,14 +129,6 @@
   </div>
   {% include "pages/transaction_modal.html" %}
 {% endblock content %}
-
-
-{% block extrajs %}
-  <script>
-        $(document).ready(function () {
-            // Javascript method's body can be found in assets/js/demos.js
-            demo.initDashboardPageCharts();
-
-        });
-  </script>
-{% endblock extrajs %}
+{% block extra_js %}
+  <script src="{% static 'assets/js/plugins/apexcharts.min.js' %}"></script>
+{% endblock extra_js %}

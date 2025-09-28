@@ -1,0 +1,18 @@
+{% if request.user.is_authenticated %}
+  <div class="row g-2">
+    <div class="col-12 col-md-6 d-grid">
+      <button class="btn btn-sm btn-primary w-100"
+              hx-get="{% url 'transactions-update' pk=transaction.pk %}"
+              hx-target="#modal-body"
+              data-bs-toggle="modal"
+              data-bs-target="#transactionModal">Update</button>
+    </div>
+    <div class="col-12 col-md-6 d-grid">
+      <button class="btn btn-sm btn-danger w-100"
+              hx-get="{% url 'transactions-confirm-delete' pk=transaction.pk %}"
+              hx-target="#modal-body"
+              data-bs-toggle="modal"
+              data-bs-target="#transactionModal">Delete</button>
+    </div>
+  </div>
+{% endif %}

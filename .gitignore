@@ -96,4 +96,6 @@ public/staticfiles/
 
 db.sqlite3
 
+# Local fixtures
+fixtures/*
 requirements_local.txt
